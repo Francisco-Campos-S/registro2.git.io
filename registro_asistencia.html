@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Asistencia</title>
+    <title>Registro de asistencia</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -149,24 +149,24 @@
 <body>
     <main>
         <section id="asistenciaSection">
-            <h2>Registro de Asistencia Estudiantil</h2>
+            <h2>Registro de asistencia estudiantil</h2>
             <div id="alertaContainer" class="alerta"></div>
             <div class="controles">
-                <button onclick="agregarFila()">Agregar Estudiante</button>
-                <button onclick="guardarDatos()">Guardar Datos</button>
-                <button onclick="exportarDatos()">Exportar Lista</button>
-                <button onclick="descargarPlantilla()">Descargar Plantilla Vacía</button>
+                <button onclick="agregarFila()">Agregar estudiante</button>
+                <button onclick="guardarDatos()">Guardar datos</button>
+                <button onclick="exportarDatos()">Exportar lista</button>
+                <button onclick="descargarPlantilla()">Descargar plantilla vacía</button>
                 <input type="file" id="inputFile" accept=".csv" style="display: none;" onchange="cargarPlantilla(this)">
-                <button onclick="document.getElementById('inputFile').click()">Cargar Lista desde CSV</button>
-                <button onclick="limpiarDatos()" class="eliminar">Limpiar Todo</button>
+                <button onclick="document.getElementById('inputFile').click()">Cargar lista desde CSV</button>
+                <button onclick="limpiarDatos()" class="eliminar">Limpiar todo</button>
             </div>
             <div class="instrucciones">
-                <p>1. Para empezar, descarga la plantilla vacía haciendo clic en "Descargar Plantilla Vacía"</p>
-                <p>2. Abre la plantilla con Excel o cualquier editor de hojas de cálculo</p>
-                <p>3. La plantilla incluirá 3 ejemplos que puedes modificar o eliminar</p>
-                <p>4. Llena la plantilla con los datos de tus estudiantes</p>
-                <p>5. Guarda el archivo como CSV (separado por comas)</p>
-                <p>6. Usa el botón "Cargar Lista desde CSV" para importar tu lista de estudiantes</p>
+                <p>1. Descarga la plantilla vacía haciendo clic en "Descargar plantilla vacía".</p>
+                <p>2. Ábrela con Excel o cualquier editor de hojas de cálculo.</p>
+                <p>3. Modifica o elimina los ejemplos incluidos.</p>
+                <p>4. Llena la plantilla con los datos de tus estudiantes.</p>
+                <p>5. Guarda el archivo como CSV (separado por comas).</p>
+                <p>6. Usa el botón "Cargar lista desde CSV" para importar la lista de estudiantes.</p>
             </div>
             <div id="asistenciaContainer"></div>
         </section>
@@ -194,13 +194,13 @@
         }
 
         function renderAsistencia() {
-            let html = '<div class="version-mensaje">Sistema de Registro de Asistencia - Versión ' + VERSION + '</div>';
+            let html = '<div class="version-mensaje">Sistema de registro de asistencia - Versión ' + VERSION + '</div>';
             html += '<table><thead><tr>' +
                 '<th>#</th>' +
                 '<th>Cédula</th>' +
                 '<th>Nombre</th>' +
-                '<th>Primer Apellido</th>' +
-                '<th>Segundo Apellido</th>' +
+                '<th>Primer apellido</th>' +
+                '<th>Segundo apellido</th>' +
                 '<th>Asistencia</th>' +
                 '<th>Fecha</th>' +
                 '<th>Acciones</th>' +
@@ -299,15 +299,15 @@
             }
 
             const csvRows = [];
-            const headers = ['Cédula', 'Nombre', 'Primer Apellido', 'Segundo Apellido', 'Asistencia', 'Fecha'];
+            const headers = ['Cédula', 'Nombre', 'Primer apellido', 'Segundo apellido', 'Asistencia', 'Fecha'];
             csvRows.push(headers.join(','));
 
             estudiantes.forEach((estudiante) => {
                 const row = [
-                    estudiante.cedula,
-                    estudiante.nombre,
-                    estudiante.apellido1,
-                    estudiante.apellido2,
+                    `"${estudiante.cedula}"`,
+                    `"${estudiante.nombre}"`,
+                    `"${estudiante.apellido1}"`,
+                    `"${estudiante.apellido2}"`,
                     estudiante.asistencia ? 'Sí' : 'No',
                     estudiante.fecha
                 ];
@@ -326,17 +326,17 @@
         }
 
         function descargarPlantilla() {
-            // Crear contenido en formato Excel
+            // Crear contenido en formato Excel compatible
             let excelContent = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">';
             excelContent += '<head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Plantilla</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>';
             excelContent += '<body>';
             excelContent += '<table>';
-            
+
             // Agregar encabezados con estilo
             excelContent += '<tr style="background-color: #2c3e50; color: white; font-weight: bold;">';
-            excelContent += '<td>Cédula</td><td>Nombre</td><td>Primer Apellido</td><td>Segundo Apellido</td>';
+            excelContent += '<td>Cédula</td><td>Nombre</td><td>Primer apellido</td><td>Segundo apellido</td>';
             excelContent += '</tr>';
-            
+
             // Agregar ejemplos
             plantillaEjemplo.forEach(ejemplo => {
                 excelContent += '<tr>';
@@ -346,22 +346,32 @@
                 excelContent += `<td>${ejemplo.apellido2}</td>`;
                 excelContent += '</tr>';
             });
-            
+
             // Agregar líneas vacías para llenar
             for(let i = 0; i < 20; i++) {
                 excelContent += '<tr><td></td><td></td><td></td><td></td></tr>';
             }
-            
+
             excelContent += '</table></body></html>';
 
-            // Crear el blob con el contenido de Excel
-            const blob = new Blob(['\ufeff' + excelContent], { type: 'application/vnd.ms-excel' });
-            const link = document.createElement('a');
-            
-            link.href = URL.createObjectURL(blob);
-            link.download = 'plantilla_estudiantes.xls';
-            link.click();
-            mostrarAlerta('Plantilla de Excel descargada correctamente', 'exito');
+            try {
+                // Crear el blob con el contenido de Excel
+                const blob = new Blob(['\ufeff' + excelContent], { type: 'application/vnd.ms-excel' });
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    // Para IE y Edge antiguos
+                    window.navigator.msSaveOrOpenBlob(blob, 'plantilla_estudiantes.xls');
+                } else {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'plantilla_estudiantes.xls';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+                mostrarAlerta('Plantilla de Excel descargada correctamente', 'exito');
+            } catch (e) {
+                mostrarAlerta('Error al descargar la plantilla. Intente con otro navegador.', 'error');
+            }
         }
 
         function cargarPlantilla(input) {

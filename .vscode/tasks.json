@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cmake",
+			"label": "CMake: configurar",
+			"command": "configure",
+			"problemMatcher": [],
+			"detail": "Tarea configurar plantilla de CMake",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
