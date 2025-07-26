@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro2025</title>
+    <style>
+        :root {
+            --color-primario: #1976d2;
+            --color-secundario: #1565c0;
+            --color-exito: #43a047;
+            --color-alerta: #fbc02d;
+            --color-error: #e74c3c;
+            --color-fondo: #e3e9f7;
+            --color-table-bg: #fff;
+            --color-table-row: #f7faff;
+            --color-table-hover: #e3e9f7;
+            --color-text: #2c3e50;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-primario: #90caf9;
+                --color-secundario: #1565c0;
+                --color-exito: #66bb6a;
+                --color-alerta: #ffd54f;
+                --color-error: #ef5350;
+                --color-fondo: #263238;
+                --color-table-bg: #37474f;
+                --color-table-row: #263238;
+                --color-table-hover: #1976d2;
+                --color-text: #fff;
+            }
+        }
+        body {
+            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(120deg, var(--color-secundario) 0%, var(--color-fondo) 100%);
+            color: var(--color-text);
+        }
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, var(--color-secundario) 0%, var(--color-primario) 100%);
+            box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+            padding: 22px 0 14px 0;
+            border-radius: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .actions-bar, .instrucciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            align-items: center;
+            background: var(--color-fondo);
+            box-shadow: 0 6px 24px rgba(44,62,80,0.13);
+            border-radius: 18px;
+            padding: 22px 28px;
+            margin-bottom: 28px;
+        }
+        .actions-bar button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.08em;
+            background: linear-gradient(90deg, var(--color-primario) 60%, var(--color-secundario) 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 28px;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(25,118,210,0.13);
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+            position: relative;
+            letter-spacing: 0.5px;
+        }
+        .actions-bar button:hover {
+            background: linear-gradient(90deg, var(--color-secundario) 0%, var(--color-primario) 100%);
+            transform: scale(1.07);
+            box-shadow: 0 8px 32px rgba(25,118,210,0.18);
+        }
+        .actions-bar button[title]:hover:after {
+            content: attr(title);
+            position: absolute;
+            left: 50%;
+            top: -32px;
+            transform: translateX(-50%);
+            background: var(--color-table-bg);
+            color: var(--color-text);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+            white-space: nowrap;
+            z-index: 100;
+        }
+        .actions-bar svg {
+            width: 18px;
+            height: 18px;
+            vertical-align: middle;
+            fill: #fff;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 10px;
+            position: relative;
+            width: 100%;
+        }
+        table {
+            min-width: 900px;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--color-table-bg);
+            box-shadow: 0 8px 32px rgba(44,62,80,0.13);
+            border-radius: 18px;
+            overflow: hidden;
+            color: var(--color-text);
+            margin: 0;
+        }
+        th, td {
+            border: 1px solid var(--color-fondo);
+            padding: 12px 14px;
+            text-align: left;
+            white-space: nowrap;
+        }
+        th.nombre, td.nombre { min-width: 160px; }
+        th.apellido1, td.apellido1,
+        th.apellido2, td.apellido2 { min-width: 140px; }
+        th {
+            z-index: 2;
+        th[rowspan="2"]:nth-child(2),
+        th[rowspan="2"]:nth-child(3),
+        th[rowspan="2"]:nth-child(4),
+        th[rowspan="2"]:nth-child(5),
+        td.cedula,
+        td.nombre,
+        td.apellido1,
+        td.apellido2,
+        td:nth-child(1) {
+            position: sticky;
+            left: 0;
+            background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%);
+            box-shadow: 2px 0 8px rgba(44,62,80,0.07);
+        }
+        th[rowspan="2"]:nth-child(2) { left: 54px; }
+        th[rowspan="2"]:nth-child(3) { left: 164px; }
+        th[rowspan="2"]:nth-child(4) { left: 324px; }
+        th[rowspan="2"]:nth-child(5) { left: 464px; }
+        td.cedula { left: 54px; }
+        td.nombre { left: 164px; }
+        td.apellido1 { left: 324px; }
+        td.apellido2 { left: 464px; }
+        td:nth-child(1) { left: 0; }
+            background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%);
+            color: #263238;
+            font-weight: 700;
+            font-size: 1.13em;
+            border-bottom: 2px solid var(--color-primario);
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 12px rgba(44,62,80,0.10);
+            padding-top: 16px;
+            padding-bottom: 12px;
+            text-shadow: 0 1px 2px rgba(44,62,80,0.07);
+        }
+        th.cedula, td.cedula { min-width: 110px; }
+        th.nombre, td.nombre { min-width: 160px; }
+        th.apellido1, td.apellido1 { min-width: 140px; }
+        th.apellido2, td.apellido2 { min-width: 140px; }
+        th, td { z-index: 2; }
+        /* Sticky columns: solo las primeras cinco */
+        th[rowspan="2"]:nth-child(1) { position: sticky; left: 0; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        th[rowspan="2"]:nth-child(2) { position: sticky; left: 54px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        th[rowspan="2"]:nth-child(3) { position: sticky; left: 164px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        th[rowspan="2"]:nth-child(4) { position: sticky; left: 324px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        th[rowspan="2"]:nth-child(5) { position: sticky; left: 464px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        td:nth-child(1) { position: sticky; left: 0; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        td.cedula { position: sticky; left: 54px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        td.nombre { position: sticky; left: 164px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        td.apellido1 { position: sticky; left: 324px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        td.apellido2 { position: sticky; left: 464px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        /* Fin sticky */
+        th {
+            color: #263238;
+            font-weight: 700;
+            font-size: 1.13em;
+            border-bottom: 2px solid var(--color-primario);
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 12px rgba(44,62,80,0.10);
+            padding-top: 16px;
+            padding-bottom: 12px;
+            text-shadow: 0 1px 2px rgba(44,62,80,0.07);
+        }
+        thead tr:first-child th {
+            background: linear-gradient(90deg, var(--color-secundario) 0%, var(--color-primario) 100%) !important;
+            color: #fff !important;
+            text-shadow: 0 2px 8px rgba(44,62,80,0.10);
+        }
+        th:first-child {
+            border-top-left-radius: 12px;
+        }
+        th:last-child {
+            border-top-right-radius: 12px;
+        }
+        th:hover {
+            background: linear-gradient(180deg, #dbe6f6 0%, #e3e9f7 100%);
+            box-shadow: 0 4px 18px rgba(44,62,80,0.13);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        tbody tr:nth-child(odd) td {
+            background: #f4f7fb;
+        }
+        tbody tr:nth-child(even) td {
+            background: rgba(44,62,80,0.13);
+        }
+        td.numero {
+            font-weight: 900;
+            font-size: 1.45em;
+            text-align: center;
+            letter-spacing: 1.5px;
+            border-right: 3px solid #1565c0;
+            border-left: 3px solid #1565c0;
+            box-shadow: 0 2px 12px rgba(44,62,80,0.22);
+            padding: 8px 0;
+            transition: background 0.2s, color 0.2s;
+        }
+        tbody tr:nth-child(odd) td.numero {
+            background: #f0f4fa !important;
+            color: #111 !important;
+            font-size: 1.45em !important;
+            font-weight: 900 !important;
+            border: 3px solid #1565c0 !important;
+            text-shadow: 0 2px 12px #fff, 0 1px 0 #fff, 0 2px 8px #263238;
+        }
+        tbody tr:nth-child(even) td.numero {
+            background: rgba(44,62,80,0.13) !important;
+            color: #fff !important;
+            font-size: 1.45em !important;
+            font-weight: 900 !important;
+            border: 3px solid #1565c0 !important;
+            text-shadow: 0 2px 8px #222, 0 1px 0 #222;
+        }
+        tr:hover td {
+            transition: background 0.2s;
+        }
+        tbody tr:hover {
+            outline: 3px solid #e74c3c;
+            outline-offset: -3px;
+            box-shadow: none;
+            z-index: 3;
+        }
+        input[type="text"], select, input[type="date"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px 10px;
+            border-radius: 7px;
+            border: 1px solid #cfd8dc;
+            background: #f8fafc;
+            font-size: 1em;
+            margin-bottom: 2px;
+        }
+        input[type="number"] {
+            width: 54px;
+            padding: 8px 4px;
+            border-radius: 7px;
+            border: 1px solid #cfd8dc;
+            background: #f8fafc;
+            font-size: 1em;
+            text-align: center;
+            margin-bottom: 2px;
+        }
+        button {
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 6px rgba(44,62,80,0.07);
+        }
+        button:active {
+            opacity: 0.85;
+        }
+        .btn-eliminar-dia, .btn-eliminar-est {
+            background: linear-gradient(90deg, var(--color-error) 60%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 7px 18px;
+            border-radius: 10px;
+            font-size: 1em;
+            box-shadow: 0 2px 8px rgba(231,76,60,0.13);
+            font-weight: 600;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+        .btn-eliminar-dia:hover, .btn-eliminar-est:hover {
+            background: linear-gradient(90deg, #c0392b 0%, var(--color-error) 100%);
+            transform: scale(1.07);
+            box-shadow: 0 6px 24px rgba(231,76,60,0.18);
+        }
+        .btn-agregar-dia {
+            background: linear-gradient(90deg, var(--color-exito) 60%, #27ae60 100%);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            font-size: 1.08em;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(39,174,96,0.13);
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+        .btn-agregar-dia:hover {
+            background: linear-gradient(90deg, #27ae60 0%, var(--color-exito) 100%);
+            transform: scale(1.07);
+            box-shadow: 0 8px 32px rgba(39,174,96,0.18);
+        }
+        .btn-agregar-est {
+            background: linear-gradient(90deg, var(--color-primario) 60%, #3498db 100%);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 10px;
+            margin-left: 10px;
+            font-size: 1.08em;
+            font-weight: 600;
+            box-shadow: 0 4px 16px rgba(52,152,219,0.13);
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+        .btn-agregar-est:hover {
+            background: linear-gradient(90deg, #3498db 0%, var(--color-primario) 100%);
+            transform: scale(1.07);
+            box-shadow: 0 8px 32px rgba(52,152,219,0.18);
+        }
+        .alerta {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 220px;
+            max-width: 90vw;
+            z-index: 9999;
+            font-size: 1.12em;
+            font-weight: 600;
+            box-shadow: 0 6px 24px rgba(44,62,80,0.18);
+            animation: fadeIn 0.3s;
+            border-radius: 10px;
+            padding: 12px 24px;
+            letter-spacing: 0.5px;
+        }
+        .alerta.exito {
+            background-color: var(--color-exito);
+            color: #fff;
+            border: 1px solid #c3e6cb;
+        }
+        .alerta.error {
+            background-color: var(--color-error);
+            color: #fff;
+            border: 1px solid #f5c6cb;
+        }
+        .alerta.info {
+            background-color: var(--color-alerta);
+            color: #2c3e50;
+            border: 1px solid #ffeeba;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) scale(0.95); }
+            to { opacity: 1; transform: translateX(-50%) scale(1); }
+        }
+        .instrucciones {
+            background-color: var(--color-alerta);
+            color: #856404;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            border: 1px solid #ffeeba;
+            flex-direction: column;
+        }
+        .instrucciones p {
+            margin: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        .instrucciones p:before {
+            content: "•";
+            position: absolute;
+            left: 5px;
+        }
+        @media (max-width: 900px) {
+            table, thead, tbody, th, td, tr { display: revert; }
+            th, td { width: revert; }
+            .instrucciones, #contadorEstudiantes, #app, div[style*="margin-bottom"] { padding: 8px; }
+            table { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- SheetJS para exportar a Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <header style="text-align:center;margin-bottom:25px;">
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="Asistencia" style="height:54px;margin-bottom:10px;filter:drop-shadow(0 2px 8px rgba(44,62,80,0.10));">
+        <h1 style="font-size:2.3em;color:#fff;margin-bottom:8px;letter-spacing:1px;font-weight:700;text-shadow:0 2px 8px rgba(44,62,80,0.10);">Registro de Asistencia 2025</h1>
+        <span style="font-size:1.15em;color:#e3e9f7;font-weight:400;">Sistema profesional para el control de asistencia por día y estudiante</span>
+    </header>
+    <div class="instrucciones">
+        <strong>Instrucciones:</strong>
+        <p>Solo se permite importar y exportar archivos Excel (.xlsx).</p>
+        <p>Para agregar días de asistencia, usa el botón <b>+ Agregar día</b>.</p>
+        <p>Puedes editar los datos de los estudiantes y la asistencia por día directamente en la tabla.</p>
+        <p>Para descargar la plantilla de ejemplo, usa <b>Descargar plantilla</b>.</p>
+        <p>Para guardar los datos, simplemente edita la tabla; se guardan automáticamente.</p>
+        <p>Para importar datos desde Excel, usa <b>Importar Excel</b>.</p>
+    </div>
+    <div class="actions-bar" style="margin-bottom:15px;">
+        <button onclick="descargarPlantilla()" title="Descarga una plantilla de ejemplo en Excel">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar plantilla  
+        </button>
+        <input type="file" id="inputExcel" accept=".xlsx" style="display:none" onchange="cargarPlantilla(event)">
+        <button onclick="document.getElementById('inputExcel').click()" title="Importa datos desde un archivo Excel (.xlsx)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><polyline points="5 12 12 19 19 12"/></svg>
+            Importar Excel
+        </button>
+        <button onclick="exportarDatos()" title="Exporta los datos actuales a Excel">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Exportar Excel
+        </button>
+        <button onclick="guardarDatosManual()" title="Guarda los datos manualmente">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2z"/><polyline points="17 3 17 8 7 8 7 3"/></svg>
+            Guardar datos
+        </button>
+        <button onclick="agregarEstudiante()" title="Agrega un nuevo estudiante">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><line x1="12" y1="16" x2="12" y2="21"/><line x1="9" y1="21" x2="15" y2="21"/></svg>
+            Agregar estudiante
+        </button>
+    </div>
+    <div id="contadorEstudiantes" style="margin-bottom:10px;font-weight:bold;"></div>
+    <div style="padding:18px 8px 24px 8px;border-radius:12px;background:#fff;">
+        <div style="background: linear-gradient(135deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 0 6px 32px rgba(44,62,80,0.10); border-radius: 18px; padding: 24px 16px;">
+            <div class="table-responsive">
+                <div id="app"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+    function guardarDatosManual() {
+        guardarDatos();
+    mostrarAlerta('Datos guardados manualmente', 'exito');
+// ...fin de funciones, sin llave extra...
+}
+    function actualizarContador() {
+        document.getElementById('contadorEstudiantes').textContent = `Cantidad de estudiantes: ${estudiantes.length}`;
+    }
+
+    function agregarEstudiante() {
+        if (estudiantes.length >= maxEstudiantes) {
+            mostrarAlerta('No se pueden agregar más de 50 estudiantes', 'error');
+            return;
+        }
+        estudiantes.push({
+            cedula: '',
+            nombre: '',
+            apellido1: '',
+            apellido2: '',
+            asistenciaDias: Array(dias.length).fill().map(() => ({ tipo: 'Ausente', cantidad: 0 }))
+        });
+        guardarDatos();
+        renderAsistencia();
+    }
+    const maxEstudiantes = 50;
+    let dias = [
+        { fecha: '', nombre: 'Día 1' },
+        { fecha: '', nombre: 'Día 2' },
+        { fecha: '', nombre: 'Día 3' },
+        { fecha: '', nombre: 'Día 4' },
+        { fecha: '', nombre: 'Día 5' }
+    ];
+    let estudiantes = [];
+    const VERSION = '2.1';
+    const STORAGE_KEY = 'registroAsistencia_v2';
+    const plantillaEjemplo = [
+        { cedula: "207890123", nombre: "Juan", apellido1: "Pérez", apellido2: "González", asistenciaDias: Array(dias.length).fill('') },
+        { cedula: "208901234", nombre: "María", apellido1: "Rodríguez", apellido2: "López", asistenciaDias: Array(dias.length).fill('') },
+        { cedula: "209012345", nombre: "Carlos", apellido1: "Sánchez", apellido2: "Jiménez", asistenciaDias: Array(dias.length).fill('') }
+    ];
+
+    function cargarDatosGuardados() {
+        const datosGuardados = localStorage.getItem(STORAGE_KEY);
+        if (datosGuardados) {
+            estudiantes = JSON.parse(datosGuardados);
+            // Sincronizar asistenciaDias con cantidad de días
+            estudiantes.forEach(est => {
+                if (!est.asistenciaDias) {
+                    est.asistenciaDias = Array(dias.length).fill('');
+                } else if (est.asistenciaDias.length < dias.length) {
+                    est.asistenciaDias = est.asistenciaDias.concat(Array(dias.length - est.asistenciaDias.length).fill(''));
+                } else if (est.asistenciaDias.length > dias.length) {
+                    est.asistenciaDias = est.asistenciaDias.slice(0, dias.length);
+                }
+            });
+            mostrarAlerta('Datos cargados correctamente', 'exito');
+        } else {
+            estudiantes = JSON.parse(JSON.stringify(plantillaEjemplo));
+        }
+        renderAsistencia();
+    }
+
+    function renderAsistencia() {
+        let html = `<div class="version-mensaje" style="margin-bottom:10px;font-size:1.08em;color:var(--color-primario);font-weight:500;">🗓️ Sistema de registro de asistencia <span style="color:var(--color-error);font-weight:bold;">v${VERSION}</span></div>`;
+        html += `<button onclick="agregarDia()" class="btn-agregar-dia" title="Agregar nuevo día de asistencia" aria-label="Agregar día">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="4"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Agregar día
+        </button>`;
+        html += `<table border="1" aria-label="Tabla de asistencia" style="border-collapse:collapse;background:var(--color-table-bg);">`;
+        html += '<thead>';
+        html += '<tr>' +
+            '<th rowspan="2">#</th>' +
+            '<th rowspan="2" class="cedula">Cédula</th>' +
+            '<th rowspan="2" class="nombre">Nombre</th>' +
+            '<th rowspan="2" class="apellido1">Primer apellido</th>' +
+            '<th rowspan="2" class="apellido2">Segundo apellido</th>' +
+            `<th colspan="${dias.length}"><span style="font-size:1.1em;font-weight:600;color:var(--color-primario);"><svg style="vertical-align:middle;margin-right:4px;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primario)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="4"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Asistencia por día</span></th>` +
+            '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-error);font-weight:700;font-size:1.08em;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-error)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>Ausencias</span></th>' +
+            '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-alerta);font-weight:700;font-size:1.08em;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-alerta)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Tardes</span></th>' +
+            '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-exito);font-weight:700;font-size:1.08em;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-exito)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 12 16 16 12"/></svg>Escapadas</span></th>' +
+            '<th rowspan="2">Acciones</th>' +
+        '</tr>';
+        html += '<tr>';
+        for (let d = 0; d < dias.length; d++) {
+            let ausentesDia = 0;
+            for (let i = 0; i < estudiantes.length; i++) {
+                let dia = estudiantes[i].asistenciaDias[d];
+                if (typeof dia === 'object' && dia.tipo === 'Ausente' && dia.cantidad > 0) ausentesDia++;
+            }
+            html += `<th><input type="date" value="${dias[d].fecha}" onchange="actualizarFechaDia(${d}, this.value)" style="width:110px;" aria-label="Fecha del día ${d+1}">`;
+            html += `<br><span style="font-size:12px;">${dias[d].nombre}</span>`;
+            html += `<br><span style="font-size:11px;color:var(--color-error);font-weight:bold;">Ausentes: ${ausentesDia}</span>`;
+            html += `<br><button onclick="eliminarDia(${d})" class="btn-eliminar-dia" title="Eliminar este día" aria-label="Eliminar día">
+                <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='3 6 5 6 21 6'/><path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m5 0V4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2'/><line x1='10' y1='11' x2='10' y2='17'/><line x1='14' y1='11' x2='14' y2='17'/></svg>
+                Eliminar
+            </button></th>`;
+        }
+        html += '</tr></thead><tbody>';
+        for (let i = 0; i < estudiantes.length; i++) {
+            const estudiante = estudiantes[i];
+            if (!estudiante.asistenciaDias || estudiante.asistenciaDias.length !== dias.length) {
+                estudiante.asistenciaDias = Array(dias.length).fill({ tipo: 'Ausente', cantidad: 0 });
+            }
+            let totalAusente = 0, totalTarde = 0, totalEscapada = 0;
+            html += `<tr>
+                <td class="numero">${i + 1}</td>
+                <td class="cedula"><input type="text" value="${estudiante.cedula || ''}" onchange="actualizarEstudiante(${i}, 'cedula', this.value)" placeholder="Número de cédula" aria-label="Cédula"></td>
+                <td class="nombre"><input type="text" value="${estudiante.nombre || ''}" onchange="actualizarEstudiante(${i}, 'nombre', this.value)" placeholder="Nombre" aria-label="Nombre"></td>
+                <td class="apellido1"><input type="text" value="${estudiante.apellido1 || ''}" onchange="actualizarEstudiante(${i}, 'apellido1', this.value)" placeholder="Primer apellido" aria-label="Primer apellido"></td>
+                <td class="apellido2"><input type="text" value="${estudiante.apellido2 || ''}" onchange="actualizarEstudiante(${i}, 'apellido2', this.value)" placeholder="Segundo apellido" aria-label="Segundo apellido"></td>
+            `;
+            for (let d = 0; d < dias.length; d++) {
+                let dia = estudiante.asistenciaDias[d];
+                if (typeof dia === 'string') {
+                    let tipo = 'Ausente';
+                    if (dia === 'Tardía') tipo = 'Tardía';
+                    if (dia === 'Escapada') tipo = 'Escapada';
+                    dia = { tipo: tipo, cantidad: 1 };
+                    estudiante.asistenciaDias[d] = dia;
+                }
+                if (!dia.tipo) dia.tipo = 'Ausente';
+                if (typeof dia.cantidad !== 'number') dia.cantidad = 0;
+                if (dia.tipo === 'Ausente') totalAusente += Number(dia.cantidad || 0);
+                if (dia.tipo === 'Tardía') totalTarde += Number(dia.cantidad || 0);
+                if (dia.tipo === 'Escapada') totalEscapada += Number(dia.cantidad || 0);
+                html += `<td style="min-width:130px;text-align:center;">
+                    <select onchange="actualizarAsistenciaTipo(${i},${d},this.value)" style="width:110px;padding:6px 8px;font-size:1em;margin-right:8px;" aria-label="Tipo asistencia estudiante ${i+1} día ${d+1}">
+                        <option value="Ausente"${dia.tipo === 'Ausente' ? ' selected' : ''}>Ausente</option>
+                        <option value="Tardía"${dia.tipo === 'Tardía' ? ' selected' : ''}>Tardía</option>
+                        <option value="Escapada"${dia.tipo === 'Escapada' ? ' selected' : ''}>Escapada</option>
+                    </select>
+                    <input type="number" min="0" value="${dia.cantidad || 0}" style="width:54px;padding:6px 4px;font-size:1em;" onchange="actualizarAsistenciaCantidad(${i},${d},this.value)" aria-label="Cantidad asistencia estudiante ${i+1} día ${d+1}">
+                </td>`;
+            }
+            html += `<td><button onclick="eliminarEstudiante(${i})" class="btn-eliminar-est" title="Eliminar estudiante" aria-label="Eliminar estudiante">
+                <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='3 6 5 6 21 6'/><path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m5 0V4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2'/><line x1='10' y1='11' x2='10' y2='17'/><line x1='14' y1='11' x2='14' y2='17'/></svg>
+                Eliminar
+            </button></td>`;
+            html += `<td style="font-weight:bold;color:var(--color-error);text-align:center;">${totalAusente}</td>`;
+            html += `<td style="font-weight:bold;color:var(--color-alerta);text-align:center;">${totalTarde}</td>`;
+            html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${totalEscapada}</td>`;
+            html += '</tr>';
+        }
+        html += '</tbody></table>';
+        document.getElementById('app').innerHTML = html;
+        actualizarContador();
+    }
+
+    function agregarDia() {
+        if (dias.length >= 20) {
+            mostrarAlerta('No se pueden agregar más de 20 días', 'error');
+            return;
+        }
+        dias.push({ fecha: '', nombre: `Día ${dias.length + 1}` });
+        estudiantes.forEach(est => {
+            est.asistenciaDias.push('');
+        });
+        renderAsistencia();
+    }
+
+    function eliminarDia(idx) {
+        if (dias.length <= 1) {
+            mostrarAlerta('Debe haber al menos un día', 'error');
+            return;
+        }
+        if (confirm('¿Seguro que deseas eliminar este día? Esta acción no se puede deshacer.')) {
+            dias.splice(idx, 1);
+            estudiantes.forEach(est => {
+                est.asistenciaDias.splice(idx, 1);
+            });
+            renderAsistencia();
+            mostrarAlerta('Día eliminado', 'info');
+        }
+    }
+
+    function actualizarFechaDia(idx, fecha) {
+        dias[idx].fecha = fecha;
+        renderAsistencia();
+    }
+
+    function actualizarEstudiante(idx, campo, valor) {
+        estudiantes[idx][campo] = valor;
+        guardarDatos();
+        renderAsistencia();
+    }
+
+    function actualizarAsistenciaDia(estIdx, diaIdx, valor) {
+        // Compatibilidad: si el valor es string, lo convierto a objeto
+        if (typeof estudiantes[estIdx].asistenciaDias[diaIdx] === 'string') {
+            estudiantes[estIdx].asistenciaDias[diaIdx] = { ausente: 0, tarde: 0, escapada: 0 };
+        }
+        // Si se usa el select, lo asigno como cantidad 1
+        if (valor === 'Ausente') estudiantes[estIdx].asistenciaDias[diaIdx].ausente = 1;
+        else if (valor === 'Tarde') estudiantes[estIdx].asistenciaDias[diaIdx].tarde = 1;
+        else if (valor === 'Escapada' || valor === 'Espadada') estudiantes[estIdx].asistenciaDias[diaIdx].escapada = 1;
+        else estudiantes[estIdx].asistenciaDias[diaIdx] = { ausente: 0, tarde: 0, escapada: 0 };
+        guardarDatos();
+        renderAsistencia();
+
+    }
+
+function actualizarAsistenciaCantidad(estIdx, diaIdx, valor) {
+    if (typeof estudiantes[estIdx].asistenciaDias[diaIdx] !== 'object') {
+        estudiantes[estIdx].asistenciaDias[diaIdx] = { tipo: 'Ausente', cantidad: 0 };
+    }
+    estudiantes[estIdx].asistenciaDias[diaIdx].cantidad = Number(valor);
+    guardarDatos();
+    renderAsistencia();
+}
+
+function actualizarAsistenciaTipo(estIdx, diaIdx, valor) {
+    if (typeof estudiantes[estIdx].asistenciaDias[diaIdx] !== 'object') {
+        estudiantes[estIdx].asistenciaDias[diaIdx] = { tipo: valor, cantidad: 0 };
+    } else {
+        estudiantes[estIdx].asistenciaDias[diaIdx].tipo = valor;
+    }
+    guardarDatos();
+    renderAsistencia();
+}
+
+    function eliminarEstudiante(idx) {
+        if (confirm('¿Seguro que deseas eliminar este estudiante? Esta acción no se puede deshacer.')) {
+            estudiantes.splice(idx, 1);
+            guardarDatos();
+            renderAsistencia();
+            mostrarAlerta('Estudiante eliminado', 'info');
+        }
+    }
+
+    function guardarDatos() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(estudiantes));
+    }
+
+    function mostrarAlerta(mensaje, tipo) {
+        let alerta = document.createElement('div');
+        alerta.className = 'alerta ' + tipo;
+        let icon = '';
+        if (tipo === 'exito') icon = '✅';
+        else if (tipo === 'error') icon = '❌';
+        else if (tipo === 'info') icon = 'ℹ️';
+        alerta.innerHTML = `<span style="margin-right:8px;">${icon}</span>${mensaje}`;
+        alerta.setAttribute('role', 'alert');
+        alerta.setAttribute('aria-live', 'assertive');
+        document.body.appendChild(alerta);
+        setTimeout(() => {
+            alerta.remove();
+        }, 2200);
+    }
+
+    function descargarPlantilla() {
+        const wb = XLSX.utils.book_new();
+        const ws_data = [
+            ["Cédula", "Nombre", "Primer apellido", "Segundo apellido", ...dias.map(d => d.nombre)]
+        ];
+        plantillaEjemplo.forEach(est => {
+            ws_data.push([
+                est.cedula,
+                est.nombre,
+                est.apellido1,
+                est.apellido2,
+                ...est.asistenciaDias
+            ]);
+        });
+        const ws = XLSX.utils.aoa_to_sheet(ws_data);
+        XLSX.utils.book_append_sheet(wb, ws, "Asistencia");
+        XLSX.writeFile(wb, "Plantilla_Registro2025.xlsx");
+    }
+
+    function cargarPlantilla(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const ws = workbook.Sheets[workbook.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+            if (rows.length < 2) {
+                mostrarAlerta('El archivo está vacío o no tiene formato válido', 'error');
+                return;
+            }
+            const encabezado = rows[0];
+            const diasImportados = encabezado.slice(4);
+            dias = diasImportados.map((nombre, idx) => ({ fecha: '', nombre: nombre || `Día ${idx + 1}` }));
+            estudiantes = rows.slice(1).map(row => ({
+                cedula: row[0] || '',
+                nombre: row[1] || '',
+                apellido1: row[2] || '',
+                apellido2: row[3] || '',
+                asistenciaDias: row.slice(4, 4 + dias.length)
+            }));
+            guardarDatos();
+            renderAsistencia();
+            mostrarAlerta('Datos importados correctamente', 'exito');
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    function exportarDatos() {
+        const wb = XLSX.utils.book_new();
+        const ws_data = [
+            ["Cédula", "Nombre", "Primer apellido", "Segundo apellido", ...dias.map(d => d.nombre)]
+        ];
+        estudiantes.forEach(est => {
+            ws_data.push([
+                est.cedula,
+                est.nombre,
+                est.apellido1,
+                est.apellido2,
+                ...est.asistenciaDias
+            ]);
+        });
+        const ws = XLSX.utils.aoa_to_sheet(ws_data);
+        XLSX.utils.book_append_sheet(wb, ws, "Asistencia");
+        XLSX.writeFile(wb, "Registro2025.xlsx");
+        mostrarAlerta('Datos exportados correctamente', 'exito');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarDatosGuardados();
+    });
+    </script>
+</body>
+</html>
