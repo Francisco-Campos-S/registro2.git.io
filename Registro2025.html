@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de asistencia</title>
+    <title>Registro2025</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -131,7 +131,7 @@
 <body>
     <main>
         <section id="asistenciaSection">
-            <h2>Registro de asistencia estudiantil</h2>
+            <h2>Registro2025</h2>
             <div id="alertaContainer" class="alerta"></div>
             <div class="controles">
                 <button onclick="agregarFila()">Agregar estudiante</button>
@@ -157,13 +157,20 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script>
         const maxEstudiantes = 50;
+        let dias = [
+            { fecha: '', nombre: 'Día 1' },
+            { fecha: '', nombre: 'Día 2' },
+            { fecha: '', nombre: 'Día 3' },
+            { fecha: '', nombre: 'Día 4' },
+            { fecha: '', nombre: 'Día 5' }
+        ];
         let estudiantes = [];
-        const VERSION = '2.0';
+        const VERSION = '2.1';
         const STORAGE_KEY = 'registroAsistencia_v2';
         const plantillaEjemplo = [
-            { cedula: "207890123", nombre: "Juan", apellido1: "Pérez", apellido2: "González" },
-            { cedula: "208901234", nombre: "María", apellido1: "Rodríguez", apellido2: "López" },
-            { cedula: "209012345", nombre: "Carlos", apellido1: "Sánchez", apellido2: "Jiménez" }
+            { cedula: "207890123", nombre: "Juan", apellido1: "Pérez", apellido2: "González", asistenciaDias: Array(dias.length).fill('') },
+            { cedula: "208901234", nombre: "María", apellido1: "Rodríguez", apellido2: "López", asistenciaDias: Array(dias.length).fill('') },
+            { cedula: "209012345", nombre: "Carlos", apellido1: "Sánchez", apellido2: "Jiménez", asistenciaDias: Array(dias.length).fill('') }
         ];
         function cargarDatosGuardados() {
             const datosGuardados = localStorage.getItem(STORAGE_KEY);
@@ -174,16 +181,23 @@
         }
         function renderAsistencia() {
             let html = '<div class="version-mensaje">Sistema de registro de asistencia - Versión ' + VERSION + '</div>';
-            html += '<table><thead><tr>' +
-                '<th>#</th>' +
-                '<th>Cédula</th>' +
-                '<th>Nombre</th>' +
-                '<th>Primer apellido</th>' +
-                '<th>Segundo apellido</th>' +
-                '<th>Asistencia</th>' +
-                '<th>Fecha</th>' +
-                '<th>Acciones</th>' +
-                '</tr></thead><tbody>';
+            html += '<button onclick="agregarDia()" style="margin-bottom:10px;">+ Agregar día</button>';
+            html += '<table><thead>';
+            html += '<tr>' +
+                '<th rowspan="2">#</th>' +
+                '<th rowspan="2">Cédula</th>' +
+                '<th rowspan="2">Nombre</th>' +
+                '<th rowspan="2">Primer apellido</th>' +
+                '<th rowspan="2">Segundo apellido</th>' +
+                `<th colspan="${dias.length}">Asistencia por día</th>` +
+                '<th rowspan="2">Acciones</th>' +
+            '</tr>';
+            html += '<tr>';
+            for (let d = 0; d < dias.length; d++) {
+                html += `<th><input type="date" value="${dias[d].fecha}" onchange="actualizarFechaDia(${d}, this.value)" style="width:110px;">`;
+                html += `<br><span style="font-size:12px;">${dias[d].nombre}</span></th>`;
+            }
+            html += '</tr></thead><tbody>';
             for (let i = 0; i < estudiantes.length; i++) {
                 const estudiante = estudiantes[i];
                 html += `<tr>
@@ -192,9 +206,19 @@
                     <td><input type="text" value="${estudiante.nombre || ''}" onchange="actualizarEstudiante(${i}, 'nombre', this.value)" placeholder="Nombre"></td>
                     <td><input type="text" value="${estudiante.apellido1 || ''}" onchange="actualizarEstudiante(${i}, 'apellido1', this.value)" placeholder="Primer apellido"></td>
                     <td><input type="text" value="${estudiante.apellido2 || ''}" onchange="actualizarEstudiante(${i}, 'apellido2', this.value)" placeholder="Segundo apellido"></td>
-                    <td><input type="checkbox" ${estudiante.asistencia ? 'checked' : ''} onchange="actualizarEstudiante(${i}, 'asistencia', this.checked)"></td>
-                    <td><input type="date" value="${estudiante.fecha || ''}" onchange="actualizarEstudiante(${i}, 'fecha', this.value)"></td>
-                    <td><button class="eliminar" onclick="eliminarFila(${i})">Eliminar</button></td>
+                    `;
+                for (let d = 0; d < dias.length; d++) {
+                    html += `<td><select onchange="actualizarAsistenciaDia(${i}, ${d}, this.value)">
+                        <option value="" ${(estudiante.asistenciaDias && estudiante.asistenciaDias[d] === '') ? 'selected' : ''}></option>
+                        <option value="Ausente" ${(estudiante.asistenciaDias && estudiante.asistenciaDias[d] === 'Ausente') ? 'selected' : ''}>Ausente</option>
+                        <option value="Tarde" ${(estudiante.asistenciaDias && estudiante.asistenciaDias[d] === 'Tarde') ? 'selected' : ''}>Tarde</option>
+                        <option value="Espadada" ${(estudiante.asistenciaDias && estudiante.asistenciaDias[d] === 'Espadada') ? 'selected' : ''}>Espadada</option>
+                        <option value="1" ${(estudiante.asistenciaDias && estudiante.asistenciaDias[d] === '1') ? 'selected' : ''}>1</option>
+                        <option value="2" ${(estudiante.asistenciaDias && estudiante.asistenciaDias[d] === '2') ? 'selected' : ''}>2</option>
+                        <option value="3" ${(estudiante.asistenciaDias && estudiante.asistenciaDias[d] === '3') ? 'selected' : ''}>3</option>
+                    </select></td>`;
+                }
+                html += `<td><button class="eliminar" onclick="eliminarFila(${i})">Eliminar</button></td>
                 </tr>`;
             }
             html += '</tbody></table>';
@@ -214,10 +238,32 @@
                 mostrarAlerta('Se ha alcanzado el máximo de 50 estudiantes.', 'error');
                 return;
             }
-            const fecha = new Date().toISOString().split('T')[0];
-            estudiantes.push({ cedula: '', nombre: '', apellido1: '', apellido2: '', asistencia: false, fecha: fecha });
+            estudiantes.push({ cedula: '', nombre: '', apellido1: '', apellido2: '', asistenciaDias: Array(dias.length).fill('') });
             renderAsistencia();
             mostrarAlerta('Estudiante agregado correctamente', 'exito');
+            guardarDatos();
+        }
+        function agregarDia() {
+            const nuevoDia = { fecha: '', nombre: `Día ${dias.length + 1}` };
+            dias.push(nuevoDia);
+            // Actualizar asistenciaDias en cada estudiante
+            estudiantes.forEach(est => {
+                if (!est.asistenciaDias) est.asistenciaDias = [];
+                est.asistenciaDias.push('');
+            });
+            renderAsistencia();
+            guardarDatos();
+        }
+
+        function actualizarFechaDia(idxDia, valor) {
+            dias[idxDia].fecha = valor;
+            guardarDatos();
+        }
+        function actualizarAsistenciaDia(idxEstudiante, idxDia, valor) {
+            if (!estudiantes[idxEstudiante].asistenciaDias) {
+                estudiantes[idxEstudiante].asistenciaDias = Array(dias.length).fill('');
+            }
+            estudiantes[idxEstudiante].asistenciaDias[idxDia] = valor;
             guardarDatos();
         }
         function eliminarFila(idx) {
@@ -250,17 +296,21 @@
                 return;
             }
             const csvRows = [];
-            const headers = ['Cédula', 'Nombre', 'Primer apellido', 'Segundo apellido', 'Asistencia', 'Fecha'];
+            const headers = ['Cédula', 'Nombre', 'Primer apellido', 'Segundo apellido'];
+            dias.forEach((dia, idx) => {
+                headers.push(`${dia.nombre}${dia.fecha ? ' (' + dia.fecha + ')' : ''}`);
+            });
             csvRows.push(headers.join(','));
             estudiantes.forEach((estudiante) => {
                 const row = [
                     `"${estudiante.cedula}"`,
                     `"${estudiante.nombre}"`,
                     `"${estudiante.apellido1}"`,
-                    `"${estudiante.apellido2}"`,
-                    estudiante.asistencia ? 'Sí' : 'No',
-                    estudiante.fecha
+                    `"${estudiante.apellido2}"`
                 ];
+                for (let d = 0; d < dias.length; d++) {
+                    row.push(`"${(estudiante.asistenciaDias && estudiante.asistenciaDias[d]) || ''}"`);
+                }
                 csvRows.push(row.join(','));
             });
             const csvContent = csvRows.join('\n');
@@ -273,27 +323,38 @@
             mostrarAlerta('Datos exportados correctamente', 'exito');
         }
         function descargarPlantilla() {
-            // Generar plantilla en formato Excel (.xlsx) real usando SheetJS, sin columna Agente
+            // Generar plantilla en formato Excel (.xlsx) con columnas para cada día
             const headers = ['Cédula', 'Nombre', 'Primer apellido', 'Segundo apellido'];
+            dias.forEach((dia, idx) => {
+                headers.push(`${dia.nombre}${dia.fecha ? ' (' + dia.fecha + ')' : ''}`);
+            });
             let datos = [];
             // Ejemplos
             for (let j = 0; j < plantillaEjemplo.length; j++) {
                 const ejemplo = plantillaEjemplo[j];
-                datos.push({
+                let fila = {
                     'Cédula': ejemplo.cedula,
                     'Nombre': ejemplo.nombre,
                     'Primer apellido': ejemplo.apellido1,
                     'Segundo apellido': ejemplo.apellido2
-                });
+                };
+                for (let d = 0; d < dias.length; d++) {
+                    fila[headers[4 + d]] = '';
+                }
+                datos.push(fila);
             }
             // 20 filas vacías
             for (let i = 0; i < 20; i++) {
-                datos.push({
+                let fila = {
                     'Cédula': '',
                     'Nombre': '',
                     'Primer apellido': '',
                     'Segundo apellido': ''
-                });
+                };
+                for (let d = 0; d < dias.length; d++) {
+                    fila[headers[4 + d]] = '';
+                }
+                datos.push(fila);
             }
             // Crear hoja y libro
             const ws = XLSX.utils.json_to_sheet(datos, { header: headers });
