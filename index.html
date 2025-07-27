@@ -396,7 +396,7 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <header style="text-align:center;margin-bottom:25px;">
         <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="Asistencia" style="height:54px;margin-bottom:10px;filter:drop-shadow(0 2px 8px rgba(44,62,80,0.10));">
-        <h1 style="font-size:2.3em;color:#fff;margin-bottom:8px;letter-spacing:1px;font-weight:700;text-shadow:0 2px 8px rgba(44,62,80,0.10);">Registro de Asistencia 2025</h1>
+        <h1 style="font-size:2.3em;color:#fff;margin-bottom:8px;letter-spacing:1px;font-weight:700;text-shadow:0 2px 8px rgba(44,62,80,0.10);">Registro de Asistencia 2026</h1>
         <span style="font-size:1.15em;color:#e3e9f7;font-weight:400;">Sistema profesional para el control de asistencia por día y estudiante</span>
     </header>
     <div class="instrucciones">
@@ -418,7 +418,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><polyline points="5 12 12 19 19 12"/></svg>
             Importar Excel
         </button>
-        <button onclick="exportarDatos()" title="Exporta los datos actuales a Excel">
+        <button onclick="exportarDatos()" title="Exporta los datos actuales to Excel">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Exportar Excel
         </button>
@@ -478,11 +478,11 @@ function agregarEstudiante() {
 }
     const maxEstudiantes = 50;
     let dias = [
-        { fecha: '', nombre: 'Día 1' },
-        { fecha: '', nombre: 'Día 2' },
-        { fecha: '', nombre: 'Día 3' },
-        { fecha: '', nombre: 'Día 4' },
-        { fecha: '', nombre: 'Día 5' }
+        { fecha: '', nombre: 'Día 1', lecciones: 0 },
+        { fecha: '', nombre: 'Día 2', lecciones: 0 },
+        { fecha: '', nombre: 'Día 3', lecciones: 0 },
+        { fecha: '', nombre: 'Día 4', lecciones: 0 },
+        { fecha: '', nombre: 'Día 5', lecciones: 0 }
     ];
     let estudiantes = [];
     const VERSION = '2.1';
@@ -496,7 +496,23 @@ function agregarEstudiante() {
     function cargarDatosGuardados() {
         const datosGuardados = localStorage.getItem(STORAGE_KEY);
         if (datosGuardados) {
-            estudiantes = JSON.parse(datosGuardados);
+            let datos = JSON.parse(datosGuardados);
+            if (Array.isArray(datos)) {
+                // Compatibilidad con versiones anteriores
+                estudiantes = datos;
+            } else {
+                estudiantes = datos.estudiantes || [];
+                // Restaurar días y sus fechas
+                if (Array.isArray(datos.dias)) {
+                    dias = datos.dias.map((dia, idx) => ({
+                        fecha: dia.fecha || '',
+                        nombre: dia.nombre || `Día ${idx + 1}`,
+                        lecciones: typeof dia.lecciones === 'number' ? dia.lecciones : 0
+                    }));
+                } else {
+                    dias = dias;
+                }
+            }
             // Sincronizar asistenciaDias con cantidad de días
             estudiantes.forEach(est => {
                 if (!est.asistenciaDias) {
@@ -517,25 +533,29 @@ function agregarEstudiante() {
     }
 
     function renderAsistencia() {
-        let html = `<div class="version-mensaje" style="margin-bottom:10px;font-size:1.08em;color:var(--color-primario);font-weight:500;">🗓️ Sistema de registro de asistencia <span style="color:var(--color-error);font-weight:bold;">v${VERSION}</span></div>`;
-        html += `<button onclick="agregarDia()" class="btn-agregar-dia" title="Agregar nuevo día de asistencia" aria-label="Agregar día">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="4"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            Agregar día
-        </button>`;
-        html += `<table border="1" aria-label="Tabla de asistencia" style="border-collapse:collapse;background:var(--color-table-bg);">`;
-        html += '<thead>';
-        html += '<tr>' +
-            '<th rowspan="2">#</th>' +
-            '<th rowspan="2" class="cedula">Cédula</th>' +
-            '<th rowspan="2" class="nombre">Nombre</th>' +
-            '<th rowspan="2" class="apellido1">Primer apellido</th>' +
-            '<th rowspan="2" class="apellido2">Segundo apellido</th>' +
-            `<th colspan="${dias.length}"><span style="font-size:1.1em;font-weight:600;color:var(--color-primario);"><svg style="vertical-align:middle;margin-right:4px;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-primario)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="4"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Asistencia por día</span></th>` +
-            '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-error);font-weight:700;font-size:1.08em;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-error)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>Ausencias</span></th>' +
-            '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-alerta);font-weight:700;font-size:1.08em;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-alerta)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Tardes</span></th>' +
-            '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-exito);font-weight:700;font-size:1.08em;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-exito)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 12 16 16 12"/></svg>Escapadas</span></th>' +
-            '<th rowspan="2">Acciones</th>' +
-        '</tr>';
+let html = `<div class="version-mensaje" style="margin-bottom:10px;font-size:1.08em;color:var(--color-primario);font-weight:500;">🗓️ Sistema de registro de asistencia <span style="color:var(--color-error);font-weight:bold;">v${VERSION}</span></div>`;
+html += `<button onclick="agregarDia()" class="btn-agregar-dia" title="Agregar nuevo día de asistencia" aria-label="Agregar día">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="4"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Agregar día
+</button>`;
+// ...eliminada tabla de conversión visual...
+html += `<table border="1" aria-label="Tabla de asistencia" style="border-collapse:collapse;background:var(--color-table-bg);">`;
+html += '<thead>';
+// Fila de encabezados principal
+html += '<tr>' +
+    '<th rowspan="2">#</th>' +
+    '<th rowspan="2" class="cedula">Cédula</th>' +
+    '<th rowspan="2" class="nombre">Nombre</th>' +
+    '<th rowspan="2" class="apellido1">Primer apellido</th>' +
+    '<th rowspan="2" class="apellido2">Segundo apellido</th>' +
+    `<th colspan="${dias.length}"><span style="font-size:1em;font-weight:600;color:var(--color-primario);"><svg style="vertical-align:middle;margin-right:4px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primario)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="4"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Asistencia por día</span></th>` +
+    '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-error);font-weight:600;font-size:0.92em;padding:2px 0;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-error)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>Ausencias</span></th>' +
+    '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-alerta);font-weight:600;font-size:0.92em;padding:2px 0;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-alerta)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Tardes</span></th>' +
+    '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-exito);font-weight:600;font-size:0.92em;padding:2px 0;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-exito)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 12 16 16 12"/></svg>Escapadas</span></th>' +
+   '<th rowspan="2" style="text-align:center;color:var(--color-primario);font-weight:600;font-size:0.92em;padding:2px 0;">Total lecciones</th>' +
+   `<th rowspan="2" style="text-align:center;color:var(--color-exito);font-weight:600;font-size:0.92em;padding:2px 0;vertical-align:bottom;" title="Porcentaje de ausencias injustificadas del total de lecciones impartidas:\n0% a <1% = 10\n1% a <10% = 9\n10% a <20% = 8\n20% a <30% = 7\n30% a <40% = 6\n40% a <50% = 5\n50% a <60% = 4\n60% a <70% = 3\n70% a <80% = 2\n80% a <90% = 1\n90% a 100% = 0">% Asistencia</th>` +
+    '<th rowspan="2" style="font-size:0.92em;padding:2px 0;">Acciones</th>' +
+'</tr>';
         html += '<tr>';
         for (let d = 0; d < dias.length; d++) {
             let ausentesDia = 0;
@@ -545,6 +565,7 @@ function agregarEstudiante() {
             }
             html += `<th><input type="date" value="${dias[d].fecha}" onchange="actualizarFechaDia(${d}, this.value)" style="width:110px;" aria-label="Fecha del día ${d+1}">`;
             html += `<br><span style="font-size:12px;">${dias[d].nombre}</span>`;
+            html += `<br><input type="number" min="0" value="${dias[d].lecciones}" style="width:70px;margin-top:4px;" onchange="actualizarLeccionesDia(${d}, this.value)" placeholder="Lecciones" aria-label="Lecciones día ${d+1}">`;
             html += `<br><span style="font-size:11px;color:var(--color-error);font-weight:bold;">Ausentes: ${ausentesDia}</span>`;
             html += `<br><button onclick="eliminarDia(${d})" class="btn-eliminar-dia" title="Eliminar este día" aria-label="Eliminar día">
                 <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='3 6 5 6 21 6'/><path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m5 0V4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2'/><line x1='10' y1='11' x2='10' y2='17'/><line x1='14' y1='11' x2='14' y2='17'/></svg>
@@ -565,10 +586,10 @@ function agregarEstudiante() {
             let totalAusente = 0, totalTarde = 0, totalEscapada = 0;
             html += `<tr>
                 <td class="numero">${num++}</td>`;
-        html += `<td class="cedula"><input type="text" value="${estudiante.cedula || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'cedula', this.value)" placeholder="Número de cédula" aria-label="Cédula"></td>`;
-        html += `<td class="nombre"><input type="text" value="${estudiante.nombre || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'nombre', this.value)" placeholder="Nombre" aria-label="Nombre"></td>`;
-        html += `<td class="apellido1"><input type="text" value="${estudiante.apellido1 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido1', this.value)" placeholder="Primer apellido" aria-label="Primer apellido"></td>`;
-        html += `<td class="apellido2"><input type="text" value="${estudiante.apellido2 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido2', this.value)" placeholder="Segundo apellido" aria-label="Segundo apellido"></td>`;
+            html += `<td class="cedula"><input type="text" value="${estudiante.cedula || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'cedula', this.value)" placeholder="Número de cédula" aria-label="Cédula"></td>`;
+            html += `<td class="nombre"><input type="text" value="${estudiante.nombre || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'nombre', this.value)" placeholder="Nombre" aria-label="Nombre"></td>`;
+            html += `<td class="apellido1"><input type="text" value="${estudiante.apellido1 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido1', this.value)" placeholder="Primer apellido" aria-label="Primer apellido"></td>`;
+            html += `<td class="apellido2"><input type="text" value="${estudiante.apellido2 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido2', this.value)" placeholder="Segundo apellido" aria-label="Segundo apellido"></td>`;
             for (let d = 0; d < dias.length; d++) {
                 let dia = estudiante.asistenciaDias[d];
                 if (typeof dia === 'string') {
@@ -592,9 +613,34 @@ function agregarEstudiante() {
                     <input type="number" min="0" value="${dia.cantidad || 0}" style="width:54px;padding:6px 4px;font-size:1em;" onchange="actualizarAsistenciaCantidad(${estudiantes.indexOf(estudiante)},${d},this.value)" aria-label="Cantidad asistencia estudiante ${num-1} día ${d+1}">
                 </td>`;
             }
+           // Calcular total de lecciones para el estudiante
+           let totalLecciones = dias.reduce((acc, dia) => acc + (Number(dia.lecciones) || 0), 0);
+           // Calcular % asistencia según la tabla de conversión
+           let porcentajeAsistencia = 0;
+           if (totalLecciones > 0) {
+               let totalAusencias = totalAusente + (totalTarde * 0.5) + totalEscapada;
+               let porcentajeAusencia = (totalAusencias / totalLecciones) * 100;
+               // Redondear a dos decimales para evitar errores de comparación
+               porcentajeAusencia = Math.round(porcentajeAusencia * 100) / 100;
+               if (porcentajeAusencia > 100) porcentajeAusencia = 100;
+               // Tabla de conversión oficial, rangos estrictos
+               if (porcentajeAusencia < 1) porcentajeAsistencia = 10;
+               else if (porcentajeAusencia < 10) porcentajeAsistencia = 9;
+               else if (porcentajeAusencia < 20) porcentajeAsistencia = 8;
+               else if (porcentajeAusencia < 30) porcentajeAsistencia = 7;
+               else if (porcentajeAusencia < 40) porcentajeAsistencia = 6;
+               else if (porcentajeAusencia < 50) porcentajeAsistencia = 5;
+               else if (porcentajeAusencia < 60) porcentajeAsistencia = 4;
+               else if (porcentajeAusencia < 70) porcentajeAsistencia = 3;
+               else if (porcentajeAusencia < 80) porcentajeAsistencia = 2;
+               else if (porcentajeAusencia < 90) porcentajeAsistencia = 1;
+               else porcentajeAsistencia = 0;
+           }
             html += `<td style="font-weight:bold;color:var(--color-error);text-align:center;">${totalAusente}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-alerta);text-align:center;">${totalTarde}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${totalEscapada}</td>`;
+            html += `<td style="font-weight:bold;color:var(--color-primario);text-align:center;">${totalLecciones}</td>`;
+            html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${porcentajeAsistencia}</td>`;
             html += '</tr>';
         }
         // Render vacíos al final
@@ -606,10 +652,10 @@ function agregarEstudiante() {
             let totalAusente = 0, totalTarde = 0, totalEscapada = 0;
             html += `<tr style="opacity:0.7;"> <!-- fila vacía -->
                 <td class="numero">${num++}</td>`;
-        html += `<td class="cedula"><input type="text" value="${estudiante.cedula || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'cedula', this.value)" placeholder="Número de cédula" aria-label="Cédula"></td>`;
-        html += `<td class="nombre"><input type="text" value="${estudiante.nombre || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'nombre', this.value)" placeholder="Nombre" aria-label="Nombre"></td>`;
-        html += `<td class="apellido1"><input type="text" value="${estudiante.apellido1 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido1', this.value)" placeholder="Primer apellido" aria-label="Primer apellido"></td>`;
-        html += `<td class="apellido2"><input type="text" value="${estudiante.apellido2 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido2', this.value)" placeholder="Segundo apellido" aria-label="Segundo apellido"></td>`;
+            html += `<td class="cedula"><input type="text" value="${estudiante.cedula || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'cedula', this.value)" placeholder="Número de cédula" aria-label="Cédula"></td>`;
+            html += `<td class="nombre"><input type="text" value="${estudiante.nombre || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'nombre', this.value)" placeholder="Nombre" aria-label="Nombre"></td>`;
+            html += `<td class="apellido1"><input type="text" value="${estudiante.apellido1 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido1', this.value)" placeholder="Primer apellido" aria-label="Primer apellido"></td>`;
+            html += `<td class="apellido2"><input type="text" value="${estudiante.apellido2 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido2', this.value)" placeholder="Segundo apellido" aria-label="Segundo apellido"></td>`;
             for (let d = 0; d < dias.length; d++) {
                 let dia = estudiante.asistenciaDias[d];
                 if (typeof dia === 'string') {
@@ -633,9 +679,30 @@ function agregarEstudiante() {
                     <input type="number" min="0" value="${dia.cantidad || 0}" style="width:54px;padding:6px 4px;font-size:1em;" onchange="actualizarAsistenciaCantidad(${estudiantes.indexOf(estudiante)},${d},this.value)" aria-label="Cantidad asistencia estudiante ${num-1} día ${d+1}">
                 </td>`;
             }
+            let totalLecciones = dias.reduce((acc, dia) => acc + (Number(dia.lecciones) || 0), 0);
+            // Calcular % asistencia en base 10 usando la tabla de conversión
+            let porcentajeAsistencia = 0;
+            if (totalLecciones > 0) {
+                let totalAusencias = totalAusente + (totalTarde * 0.5) + totalEscapada;
+                let porcentajeAusencia = (totalAusencias / totalLecciones) * 100;
+                // Tabla de conversión
+                if (porcentajeAusencia < 1) porcentajeAsistencia = 10;
+                else if (porcentajeAusencia < 10) porcentajeAsistencia = 9;
+                else if (porcentajeAusencia < 20) porcentajeAsistencia = 8;
+                else if (porcentajeAusencia < 30) porcentajeAsistencia = 7;
+                else if (porcentajeAusencia < 40) porcentajeAsistencia = 6;
+                else if (porcentajeAusencia < 50) porcentajeAsistencia = 5;
+                else if (porcentajeAusencia < 60) porcentajeAsistencia = 4;
+                else if (porcentajeAusencia < 70) porcentajeAsistencia = 3;
+                else if (porcentajeAusencia < 80) porcentajeAsistencia = 2;
+                else if (porcentajeAusencia < 90) porcentajeAsistencia = 1;
+                else porcentajeAsistencia = 0;
+            }
             html += `<td style="font-weight:bold;color:var(--color-error);text-align:center;">${totalAusente}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-alerta);text-align:center;">${totalTarde}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${totalEscapada}</td>`;
+            html += `<td style="font-weight:bold;color:var(--color-primario);text-align:center;">${totalLecciones}</td>`;
+            html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${porcentajeAsistencia}</td>`;
             html += '</tr>';
         }
         html += '</tbody></table>';
@@ -648,7 +715,7 @@ function agregarEstudiante() {
             mostrarAlerta('No se pueden agregar más de 20 días', 'error');
             return;
         }
-        dias.push({ fecha: '', nombre: `Día ${dias.length + 1}` });
+        dias.push({ fecha: '', nombre: `Día ${dias.length + 1}`, lecciones: 0 });
         estudiantes.forEach(est => {
             est.asistenciaDias.push('');
         });
@@ -672,6 +739,14 @@ function agregarEstudiante() {
 
     function actualizarFechaDia(idx, fecha) {
         dias[idx].fecha = fecha;
+        guardarDatos();
+        renderAsistencia();
+    }
+
+    // Actualizar lecciones por día y guardar
+    function actualizarLeccionesDia(idx, valor) {
+        dias[idx].lecciones = Number(valor);
+        guardarDatos();
         renderAsistencia();
     }
 
@@ -702,6 +777,8 @@ function actualizarAsistenciaCantidad(estIdx, diaIdx, valor) {
     }
     estudiantes[estIdx].asistenciaDias[diaIdx].cantidad = Number(valor);
     guardarDatos();
+    // Guardar también los datos de asistencia por día
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(estudiantes));
     renderAsistencia();
 }
 
@@ -712,6 +789,8 @@ function actualizarAsistenciaTipo(estIdx, diaIdx, valor) {
         estudiantes[estIdx].asistenciaDias[diaIdx].tipo = valor;
     }
     guardarDatos();
+    // Guardar también los datos de asistencia por día
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(estudiantes));
     renderAsistencia();
 }
 
@@ -719,7 +798,6 @@ function actualizarAsistenciaTipo(estIdx, diaIdx, valor) {
 function eliminarEstudiante(idx) {
     if (confirm('¿Seguro que deseas eliminar este estudiante? Esta acción no se puede deshacer.')) {
         estudiantes.splice(idx, 1);
-        ordenarEstudiantes();
         guardarDatos();
         renderAsistencia();
         mostrarAlerta('Estudiante eliminado', 'info');
@@ -759,7 +837,8 @@ function ordenarEstudiantesManual() {
 }
 
     function guardarDatos() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(estudiantes));
+        // Guardar estudiantes y días, incluyendo fechas
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ estudiantes, dias }));
     }
 
     function mostrarAlerta(mensaje, tipo) {
@@ -873,6 +952,23 @@ function ordenarEstudiantesManual() {
 
     document.addEventListener('DOMContentLoaded', function() {
         cargarDatosGuardados();
+        // Scroll horizontal con mouse cerca del borde izquierdo/derecho
+        const tableContainer = document.querySelector('.table-responsive');
+        if (tableContainer) {
+            tableContainer.addEventListener('mousemove', function(e) {
+                const rect = tableContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const scrollSpeed = 18;
+                // Si el mouse está cerca del borde izquierdo (<30px)
+                if (x < 30) {
+                    tableContainer.scrollLeft -= scrollSpeed;
+                }
+                // Si el mouse está cerca del borde derecho (<30px)
+                if (x > rect.width - 30) {
+                    tableContainer.scrollLeft += scrollSpeed;
+                }
+            });
+        }
     });
     </script>
 </body>
