@@ -16,7 +16,6 @@
     --color-table-row: #f7faff;
     --color-table-hover: #e3e9f7;
     --color-text: #2c3e50;
-}
 body.dark-mode {
     --color-primario: #90caf9;
     --color-secundario: #1565c0;
@@ -29,10 +28,31 @@ body.dark-mode {
     --color-table-hover: #1976d2;
     --color-text: #fff;
 }
-tbody tr:nth-child(odd) td { background: #e6ecf3 !important; color: #263238; transition: background 0.2s, color 0.2s; }
-tbody tr:nth-child(even) td { background: #3a4a56 !important; color: #fff; transition: background 0.2s, color 0.2s; }
-body.dark-mode tbody tr:nth-child(odd) td { background: #263238 !important; color: #fff; }
-body.dark-mode tbody tr:nth-child(even) td { background: #37474f !important; color: #fff; }
+tbody tr:nth-child(odd) td { background: #fff !important; color: #263238 !important; transition: background 0.2s, color 0.2s; }
+tbody tr:nth-child(even) td { background: #c3d0e6 !important; color: #263238 !important; transition: background 0.2s, color 0.2s; }
+body.dark-mode tbody tr:nth-child(odd) td { background: #263238 !important; color: #fff !important; }
+body.dark-mode tbody tr:nth-child(even) td { background: #37474f !important; color: #fff !important; }
+body.dark-mode tbody tr:nth-child(odd) td.sticky { background: #263238 !important; color: #fff !important; }
+body.dark-mode tbody tr:nth-child(even) td.sticky { background: #37474f !important; color: #fff !important; }
+body.dark-mode td.sticky input,
+body.dark-mode td.sticky select,
+body.dark-mode tbody tr td input,
+body.dark-mode tbody tr td select {
+    color: #fff !important;
+    background: inherit !important;
+    border: 1px solid #789;
+}
+tbody tr:nth-child(odd) td.sticky { background: #fff !important; color: #263238 !important; }
+tbody tr:nth-child(even) td.sticky { background: #c3d0e6 !important; color: #263238 !important; }
+td.sticky input,
+td.sticky select,
+tbody tr td input,
+tbody tr td select {
+    background: inherit !important;
+    color: #263238 !important;
+    box-shadow: none !important;
+    border: 1px solid #bfc9d8;
+}
 #tooltipModoOscuro {
     display:none;
     position:absolute;
@@ -753,14 +773,14 @@ html += '<tr>' +
     '<th rowspan="2" class="nombre">Nombre</th>' +
     '<th rowspan="2" class="apellido1">Primer apellido</th>' +
     '<th rowspan="2" class="apellido2">Segundo apellido</th>' +
-    `<th colspan="${dias.length}"><span style="font-size:1em;font-weight:600;color:var(--color-primario);"><svg style="vertical-align:middle;margin-right:4px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primario)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="4"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Asistencia por día</span></th>` +
-    '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-error);font-weight:600;font-size:0.92em;padding:2px 0;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-error)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>Ausencias</span></th>' +
-    '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-alerta);font-weight:600;font-size:0.92em;padding:2px 0;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-alerta)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Tardes</span></th>' +
-    '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-exito);font-weight:600;font-size:0.92em;padding:2px 0;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-exito)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 12 16 16 12"/></svg>Escapadas</span></th>' +
-    '<th rowspan="2" style="text-align:center;color:#e74c3c;font-weight:600;font-size:0.92em;padding:2px 0;">Total ausencias</th>' +
-   '<th rowspan="2" style="text-align:center;color:var(--color-primario);font-weight:600;font-size:0.92em;padding:2px 0;">Total lecciones</th>' +
-   `<th rowspan="2" style="text-align:center;color:var(--color-exito);font-weight:600;font-size:0.92em;padding:2px 0;vertical-align:bottom;" title="Porcentaje de ausencias injustificadas del total de lecciones impartidas:\n0% a <1% = 10\n1% a <10% = 9\n10% a <20% = 8\n20% a <30% = 7\n30% a <40% = 6\n40% a <50% = 5\n50% a <60% = 4\n60% a <70% = 3\n70% a <80% = 2\n80% a <90% = 1\n90% a 100% = 0">% Asistencia</th>` +
-    '<th rowspan="2" style="font-size:0.92em;padding:2px 0;">Acciones</th>' +
+   `<th colspan="${dias.length}"><span style="font-size:1em;font-weight:600;color:var(--color-primario);"><svg style="vertical-align:middle;margin-right:4px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primario)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="4"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Asistencia por día</span></th>` +
+   '<th rowspan="2" class="th-resumen">Ausencias</th>' +
+   '<th rowspan="2" class="th-resumen">Tardías</th>' +
+   '<th rowspan="2" class="th-resumen">Escapadas</th>' +
+   '<th rowspan="2" class="th-resumen">Total ausencias</th>' +
+   '<th rowspan="2" class="th-resumen">Total lecciones</th>' +
+   `<th rowspan="2" class="th-resumen" title="Porcentaje de ausencias injustificadas del total de lecciones impartidas:\n0% a <1% = 10\n1% a <10% = 9\n10% a <20% = 8\n20% a <30% = 7\n30% a <40% = 6\n40% a <50% = 5\n50% a <60% = 4\n60% a <70% = 3\n70% a <80% = 2\n80% a <90% = 1\n90% a 100% = 0">% Asistencia</th>` +
+   '<th rowspan="2" class="th-resumen">Acciones</th>' +
 '</tr>';
         html += '<tr>';
         for (let d = 0; d < dias.length; d++) {
