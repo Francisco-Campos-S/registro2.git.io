@@ -552,6 +552,7 @@ html += '<tr>' +
     '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-error);font-weight:600;font-size:0.92em;padding:2px 0;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-error)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>Ausencias</span></th>' +
     '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-alerta);font-weight:600;font-size:0.92em;padding:2px 0;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-alerta)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Tardes</span></th>' +
     '<th rowspan="2" style="text-align:center;"><span style="color:var(--color-exito);font-weight:600;font-size:0.92em;padding:2px 0;"><svg style="vertical-align:middle;margin-right:2px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-exito)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 12 16 16 12"/></svg>Escapadas</span></th>' +
+    '<th rowspan="2" style="text-align:center;color:#e74c3c;font-weight:600;font-size:0.92em;padding:2px 0;">Total ausencias</th>' +
    '<th rowspan="2" style="text-align:center;color:var(--color-primario);font-weight:600;font-size:0.92em;padding:2px 0;">Total lecciones</th>' +
    `<th rowspan="2" style="text-align:center;color:var(--color-exito);font-weight:600;font-size:0.92em;padding:2px 0;vertical-align:bottom;" title="Porcentaje de ausencias injustificadas del total de lecciones impartidas:\n0% a <1% = 10\n1% a <10% = 9\n10% a <20% = 8\n20% a <30% = 7\n30% a <40% = 6\n40% a <50% = 5\n50% a <60% = 4\n60% a <70% = 3\n70% a <80% = 2\n80% a <90% = 1\n90% a 100% = 0">% Asistencia</th>` +
     '<th rowspan="2" style="font-size:0.92em;padding:2px 0;">Acciones</th>' +
@@ -636,9 +637,10 @@ html += '<tr>' +
                else if (porcentajeAusencia < 90) porcentajeAsistencia = 1;
                else porcentajeAsistencia = 0;
            }
-            html += `<td style="font-weight:bold;color:var(--color-error);text-align:center;">${totalAusente}</td>`;
+            html += `<td style="font-weight:bold;color:#e74c3c;text-align:center;">${totalAusente}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-alerta);text-align:center;">${totalTarde}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${totalEscapada}</td>`;
+            html += `<td style="font-weight:bold;color:#e74c3c;text-align:center;">${totalAusente + (totalTarde * 0.5) + totalEscapada}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-primario);text-align:center;">${totalLecciones}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${porcentajeAsistencia}</td>`;
             html += '</tr>';
@@ -698,9 +700,10 @@ html += '<tr>' +
                 else if (porcentajeAusencia < 90) porcentajeAsistencia = 1;
                 else porcentajeAsistencia = 0;
             }
-            html += `<td style="font-weight:bold;color:var(--color-error);text-align:center;">${totalAusente}</td>`;
+            html += `<td style="font-weight:bold;color:#e74c3c;text-align:center;">${totalAusente}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-alerta);text-align:center;">${totalTarde}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${totalEscapada}</td>`;
+            html += `<td style="font-weight:bold;color:#e74c3c;text-align:center;">${totalAusente + (totalTarde * 0.5) + totalEscapada}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-primario);text-align:center;">${totalLecciones}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${porcentajeAsistencia}</td>`;
             html += '</tr>';
@@ -719,6 +722,7 @@ html += '<tr>' +
         estudiantes.forEach(est => {
             est.asistenciaDias.push('');
         });
+        guardarDatos();
         renderAsistencia();
     }
 
@@ -777,8 +781,6 @@ function actualizarAsistenciaCantidad(estIdx, diaIdx, valor) {
     }
     estudiantes[estIdx].asistenciaDias[diaIdx].cantidad = Number(valor);
     guardarDatos();
-    // Guardar también los datos de asistencia por día
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(estudiantes));
     renderAsistencia();
 }
 
@@ -789,8 +791,6 @@ function actualizarAsistenciaTipo(estIdx, diaIdx, valor) {
         estudiantes[estIdx].asistenciaDias[diaIdx].tipo = valor;
     }
     guardarDatos();
-    // Guardar también los datos de asistencia por día
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(estudiantes));
     renderAsistencia();
 }
 
