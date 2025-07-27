@@ -5,182 +5,243 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro2025</title>
     <style>
-        :root {
-            --color-primario: #1976d2;
-            --color-secundario: #1565c0;
-            --color-exito: #43a047;
-            --color-alerta: #fbc02d;
-            --color-error: #e74c3c;
-            --color-fondo: #e3e9f7;
-            --color-table-bg: #fff;
-            --color-table-row: #f7faff;
-            --color-table-hover: #e3e9f7;
-            --color-text: #2c3e50;
-        }
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --color-primario: #90caf9;
-                --color-secundario: #1565c0;
-                --color-exito: #66bb6a;
-                --color-alerta: #ffd54f;
-                --color-error: #ef5350;
-                --color-fondo: #263238;
-                --color-table-bg: #37474f;
-                --color-table-row: #263238;
-                --color-table-hover: #1976d2;
-                --color-text: #fff;
-            }
-        }
-        body {
-            font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(120deg, var(--color-secundario) 0%, var(--color-fondo) 100%);
-            color: var(--color-text);
-        }
-        header {
-            text-align: center;
-            margin-bottom: 25px;
-            background: linear-gradient(90deg, var(--color-secundario) 0%, var(--color-primario) 100%);
-            box-shadow: 0 2px 8px rgba(44,62,80,0.10);
-            padding: 22px 0 14px 0;
-            border-radius: 14px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        .actions-bar, .instrucciones {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 18px;
-            align-items: center;
-            background: var(--color-fondo);
-            box-shadow: 0 6px 24px rgba(44,62,80,0.13);
-            border-radius: 18px;
-            padding: 22px 28px;
-            margin-bottom: 28px;
-        }
-        .actions-bar button {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.08em;
-            background: linear-gradient(90deg, var(--color-primario) 60%, var(--color-secundario) 100%);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            padding: 12px 28px;
-            font-weight: 600;
-            box-shadow: 0 4px 16px rgba(25,118,210,0.13);
-            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
-            position: relative;
-            letter-spacing: 0.5px;
-        }
-        .actions-bar button:hover {
-            background: linear-gradient(90deg, var(--color-secundario) 0%, var(--color-primario) 100%);
-            transform: scale(1.07);
-            box-shadow: 0 8px 32px rgba(25,118,210,0.18);
-        }
-        .actions-bar button[title]:hover:after {
-            content: attr(title);
-            position: absolute;
-            left: 50%;
-            top: -32px;
-            transform: translateX(-50%);
-            background: var(--color-table-bg);
-            color: var(--color-text);
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 0.95em;
-            box-shadow: 0 2px 8px rgba(44,62,80,0.10);
-            white-space: nowrap;
-            z-index: 100;
-        }
-        .actions-bar svg {
-            width: 18px;
-            height: 18px;
-            vertical-align: middle;
-            fill: #fff;
-        }
-        .table-responsive {
-            overflow-x: auto;
-            border-radius: 10px;
-            position: relative;
-            width: 100%;
-        }
-        table {
-            min-width: 900px;
-            border-collapse: separate;
-            border-spacing: 0;
-            background: var(--color-table-bg);
-            box-shadow: 0 8px 32px rgba(44,62,80,0.13);
-            border-radius: 18px;
-            overflow: hidden;
-            color: var(--color-text);
-            margin: 0;
-        }
-        th, td {
-            border: 1px solid var(--color-fondo);
-            padding: 12px 14px;
-            text-align: left;
-            white-space: nowrap;
-        }
-        th.nombre, td.nombre { min-width: 160px; }
-        th.apellido1, td.apellido1,
-        th.apellido2, td.apellido2 { min-width: 140px; }
-        th {
-            z-index: 2;
-        th[rowspan="2"]:nth-child(2),
-        th[rowspan="2"]:nth-child(3),
-        th[rowspan="2"]:nth-child(4),
-        th[rowspan="2"]:nth-child(5),
-        td.cedula,
-        td.nombre,
-        td.apellido1,
-        td.apellido2,
-        td:nth-child(1) {
-            position: sticky;
-            left: 0;
-            background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%);
-            box-shadow: 2px 0 8px rgba(44,62,80,0.07);
-        }
-        th[rowspan="2"]:nth-child(2) { left: 54px; }
-        th[rowspan="2"]:nth-child(3) { left: 164px; }
-        th[rowspan="2"]:nth-child(4) { left: 324px; }
-        th[rowspan="2"]:nth-child(5) { left: 464px; }
-        td.cedula { left: 54px; }
-        td.nombre { left: 164px; }
-        td.apellido1 { left: 324px; }
-        td.apellido2 { left: 464px; }
-        td:nth-child(1) { left: 0; }
-            background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%);
-            color: #263238;
-            font-weight: 700;
-            font-size: 1.13em;
-            border-bottom: 2px solid var(--color-primario);
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 12px rgba(44,62,80,0.10);
-            padding-top: 16px;
-            padding-bottom: 12px;
-            text-shadow: 0 1px 2px rgba(44,62,80,0.07);
-        }
-        th.cedula, td.cedula { min-width: 110px; }
-        th.nombre, td.nombre { min-width: 160px; }
-        th.apellido1, td.apellido1 { min-width: 140px; }
-        th.apellido2, td.apellido2 { min-width: 140px; }
-        th, td { z-index: 2; }
+:root {
+    --color-primario: #1976d2;
+    --color-secundario: #1565c0;
+    --color-exito: #43a047;
+    --color-alerta: #fbc02d;
+    --color-error: #e74c3c;
+    --color-fondo: #e3e9f7;
+    --color-table-bg: #fff;
+    --color-table-row: #f7faff;
+    --color-table-hover: #e3e9f7;
+    --color-text: #2c3e50;
+}
+body.dark-mode {
+    --color-primario: #90caf9;
+    --color-secundario: #1565c0;
+    --color-exito: #66bb6a;
+    --color-alerta: #ffd54f;
+    --color-error: #ef5350;
+    --color-fondo: #263238;
+    --color-table-bg: #37474f;
+    --color-table-row: #263238;
+    --color-table-hover: #1976d2;
+    --color-text: #fff;
+}
+tbody tr:nth-child(odd) td { background: #e6ecf3 !important; color: #263238; transition: background 0.2s, color 0.2s; }
+tbody tr:nth-child(even) td { background: #3a4a56 !important; color: #fff; transition: background 0.2s, color 0.2s; }
+body.dark-mode tbody tr:nth-child(odd) td { background: #263238 !important; color: #fff; }
+body.dark-mode tbody tr:nth-child(even) td { background: #37474f !important; color: #fff; }
+#tooltipModoOscuro {
+    display:none;
+    position:absolute;
+    top:60px;
+    right:18px;
+    background:#222;
+    color:#fff;
+    padding:7px 18px;
+    border-radius:8px;
+    font-size:1em;
+    box-shadow:0 2px 8px rgba(44,62,80,0.18);
+    z-index:30;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity 0.2s;
+}
+#tooltipModoOscuro.visible {
+    display:block;
+    opacity:1;
+}
+body {
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background: linear-gradient(120deg, var(--color-secundario) 0%, var(--color-fondo) 100%);
+    color: var(--color-text);
+    animation: fadeBodyIn 1.2s cubic-bezier(.77,0,.18,1) 0s;
+}
+@keyframes fadeBodyIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+header {
+    text-align: center;
+    margin-bottom: 25px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: linear-gradient(90deg, #fffde4 0%, #e3e9f7 100%);
+    box-shadow: 0 8px 32px rgba(44,62,80,0.13);
+    padding: 32px 0 24px 0;
+    border-radius: 18px;
+    animation: fadeHeaderIn 1.1s cubic-bezier(.77,0,.18,1) 0.2s;
+}
+@keyframes fadeHeaderIn {
+    from { opacity: 0; transform: scale(.95) translateY(-20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.actions-bar, .instrucciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: center;
+    background: var(--color-fondo);
+    box-shadow: 0 10px 32px rgba(44,62,80,0.16);
+    border-radius: 22px;
+    padding: 28px 34px;
+    margin-bottom: 32px;
+    animation: fadeBlockIn 1.1s cubic-bezier(.77,0,.18,1) 0.3s;
+}
+@keyframes fadeBlockIn {
+    from { opacity: 0; transform: scale(.97) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.actions-bar button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.08em;
+    background: linear-gradient(90deg, var(--color-primario) 60%, var(--color-secundario) 100%);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 32px;
+    font-weight: 600;
+    box-shadow: 0 6px 24px rgba(25,118,210,0.16);
+    transition: background 0.22s, box-shadow 0.22s, transform 0.22s;
+    position: relative;
+    letter-spacing: 0.5px;
+    outline: none;
+}
+.actions-bar button:hover, .actions-bar button:focus {
+    background: linear-gradient(90deg, var(--color-secundario) 0%, var(--color-primario) 100%);
+    transform: scale(1.09) translateY(-2px);
+    box-shadow: 0 12px 36px rgba(25,118,210,0.22);
+}
+.actions-bar button:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(25,118,210,0.10);
+}
+.actions-bar button[title]:hover:after {
+    content: attr(title);
+    position: absolute;
+    left: 50%;
+    top: -32px;
+    transform: translateX(-50%);
+    background: #fff;
+    color: #263238;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.95em;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+    white-space: nowrap;
+    z-index: 100;
+}
+.actions-bar svg {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    fill: #fff;
+    transition: transform 0.22s;
+}
+.actions-bar button:hover svg {
+    transform: rotate(-8deg) scale(1.15);
+}
+.table-responsive {
+    overflow-x: auto;
+    border-radius: 10px;
+    position: relative;
+    width: 100%;
+}
+table {
+    min-width: 900px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--color-table-bg);
+    box-shadow: 0 8px 32px rgba(44,62,80,0.13);
+    border-radius: 18px;
+    overflow: hidden;
+    color: var(--color-text);
+    margin: 0;
+}
+th, td {
+    border: 1px solid var(--color-fondo);
+    padding: 12px 14px;
+    text-align: left;
+    white-space: nowrap;
+}
+th.nombre, td.nombre { min-width: 160px; }
+th.apellido1, td.apellido1,
+th.apellido2, td.apellido2 { min-width: 140px; }
+th {
+    z-index: 2;
+}
+th[rowspan="2"]:nth-child(2),
+th[rowspan="2"]:nth-child(3),
+th[rowspan="2"]:nth-child(4),
+th[rowspan="2"]:nth-child(5),
+td.cedula,
+td.nombre,
+td.apellido1,
+td.apellido2,
+td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%);
+    box-shadow: 2px 0 8px rgba(44,62,80,0.07);
+}
+th[rowspan="2"]:nth-child(2) { left: 54px; }
+th[rowspan="2"]:nth-child(3) { left: 164px; }
+th[rowspan="2"]:nth-child(4) { left: 324px; }
+th[rowspan="2"]:nth-child(5) { left: 464px; }
+td.cedula { left: 54px; }
+td.nombre { left: 164px; }
+td.apellido1 { left: 324px; }
+td.apellido2 { left: 464px; }
+td:nth-child(1) { left: 0; }
+}
+th.cedula, td.cedula { min-width: 260px; max-width: 380px; }
+td.cedula input[type="text"] {
+    min-width: 220px;
+    max-width: 360px;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 1.12em;
+    height: 38px;
+    border-radius: 12px;
+    box-sizing: border-box;
+}
+th.nombre, td.nombre,
+th.apellido1, td.apellido1,
+th.apellido2, td.apellido2 {
+    min-width: 180px;
+}
+td.nombre input[type="text"],
+td.apellido1 input[type="text"],
+td.apellido2 input[type="text"] {
+    min-width: 160px;
+    max-width: 260px;
+    font-size: 1.12em;
+    height: 38px;
+    border-radius: 12px;
+    padding-left: 14px;
+    padding-right: 14px;
+    box-sizing: border-box;
+}
+th, td { z-index: 2; }
         /* Sticky columns: solo las primeras cinco */
-        th[rowspan="2"]:nth-child(1) { position: sticky; left: 0; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
-        th[rowspan="2"]:nth-child(2) { position: sticky; left: 54px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
-        th[rowspan="2"]:nth-child(3) { position: sticky; left: 164px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
-        th[rowspan="2"]:nth-child(4) { position: sticky; left: 324px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
-        th[rowspan="2"]:nth-child(5) { position: sticky; left: 464px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
-        td:nth-child(1) { position: sticky; left: 0; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
-        td.cedula { position: sticky; left: 54px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
-        td.nombre { position: sticky; left: 164px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
-        td.apellido1 { position: sticky; left: 324px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
-        td.apellido2 { position: sticky; left: 464px; background: linear-gradient(180deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        th[rowspan="2"]:nth-child(1) { position: sticky; left: 0; box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        th[rowspan="2"]:nth-child(2) { position: sticky; left: 54px; box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        th[rowspan="2"]:nth-child(3) { position: sticky; left: 164px; box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        th[rowspan="2"]:nth-child(4) { position: sticky; left: 324px; box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        th[rowspan="2"]:nth-child(5) { position: sticky; left: 464px; box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        td:nth-child(1) { position: sticky; left: 0; box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        td.cedula { position: sticky; left: 54px; box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        td.nombre { position: sticky; left: 164px; box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        td.apellido1 { position: sticky; left: 324px; box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
+        td.apellido2 { position: sticky; left: 464px; box-shadow: 2px 0 8px rgba(44,62,80,0.07); }
         /* Fin sticky */
         th {
             color: #263238;
@@ -210,10 +271,18 @@
             transition: background 0.2s, box-shadow 0.2s;
         }
         tbody tr:nth-child(odd) td {
-            background: #f4f7fb;
+            background: #f4f7fb !important;
+            transition: background 0.2s;
         }
         tbody tr:nth-child(even) td {
-            background: rgba(44,62,80,0.13);
+            background: #e3e9f7 !important;
+            transition: background 0.2s;
+        }
+        body.dark-mode tbody tr:nth-child(odd) td {
+            background: #263238 !important;
+        }
+        body.dark-mode tbody tr:nth-child(even) td {
+            background: #37474f !important;
         }
         td.numero {
             font-weight: 900;
@@ -252,24 +321,43 @@
             z-index: 3;
         }
         input[type="text"], select, input[type="date"] {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 8px 10px;
-            border-radius: 7px;
-            border: 1px solid #cfd8dc;
-            background: #f8fafc;
+            background: rgba(255,255,255,0.7);
+            border-radius: 10px;
+            border: 1.5px solid #b0bec5;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.07);
             font-size: 1em;
-            margin-bottom: 2px;
+            color: #263238;
+            transition: border 0.18s, box-shadow 0.18s, background 0.18s;
+        }
+        input[type="text"]:focus, select:focus, input[type="date"]:focus {
+            border: 2px solid var(--color-primario);
+            box-shadow: 0 4px 16px rgba(25,118,210,0.13);
+            background: #fff;
+            outline: none;
+        }
+        body.dark-mode input[type="text"], body.dark-mode select, body.dark-mode input[type="date"] {
+            background: rgba(55,71,79,0.8);
+            color: #fff;
+        }
+        body.dark-mode input[type="text"]:focus, body.dark-mode select:focus, body.dark-mode input[type="date"]:focus {
+            background: #263238;
         }
         input[type="number"] {
             width: 54px;
-            padding: 8px 4px;
-            border-radius: 7px;
-            border: 1px solid #cfd8dc;
+            padding: 10px 6px;
+            border-radius: 10px;
+            border: 1.5px solid #b0bec5;
             background: #f8fafc;
             font-size: 1em;
             text-align: center;
             margin-bottom: 2px;
+            transition: border 0.18s, box-shadow 0.18s;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+        }
+        input[type="number"]:focus {
+            border: 2px solid var(--color-exito);
+            box-shadow: 0 4px 16px rgba(67,160,71,0.13);
+            outline: none;
         }
         button {
             cursor: pointer;
@@ -365,92 +453,165 @@
             to { opacity: 1; transform: translateX(-50%) scale(1); }
         }
         .instrucciones {
-            background-color: var(--color-alerta);
+            background: linear-gradient(90deg, #fffde4 0%, #ffeeba 100%);
             color: #856404;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 4px;
-            border: 1px solid #ffeeba;
+            padding: 22px 28px;
+            margin: 24px 0;
+            border-radius: 14px;
+            border: 1.5px solid #ffeeba;
             flex-direction: column;
+            box-shadow: 0 4px 18px rgba(251,192,45,0.13);
+            font-size: 1.08em;
+            animation: fadeBlockIn 1.1s cubic-bezier(.77,0,.18,1) 0.4s;
         }
         .instrucciones p {
-            margin: 5px 0;
-            padding-left: 20px;
+            margin: 7px 0;
+            padding-left: 22px;
             position: relative;
+            transition: color 0.18s;
         }
         .instrucciones p:before {
             content: "•";
             position: absolute;
             left: 5px;
+            color: var(--color-alerta);
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: color 0.18s;
         }
         @media (max-width: 900px) {
             table, thead, tbody, th, td, tr { display: revert; }
-            th, td { width: revert; }
+            th, td { width: revert; font-size: 14px; }
             .instrucciones, #contadorEstudiantes, #app, div[style*="margin-bottom"] { padding: 8px; }
             table { font-size: 13px; }
         }
+        /* Refuerzo alternancia en sticky: todas las sticky td heredan el fondo alterno de la fila */
+tbody tr:nth-child(odd) td.sticky { background: #f4f7fb !important; }
+tbody tr:nth-child(even) td.sticky { background: #e3e9f7 !important; }
+body.dark-mode tbody tr:nth-child(odd) td.sticky { background: #263238 !important; }
+body.dark-mode tbody tr:nth-child(even) td.sticky { background: #37474f !important; }
+td.sticky { box-shadow: none !important; }
+th input[type="date"] {
+    width: 180px !important;
+    font-size: 1.18em;
+    height: 40px;
+    border-radius: 14px;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    border: 1.5px solid #b0bec5;
+    background: rgba(255,255,255,0.92);
+}
+th[colspan] span, th[colspan] svg {
+    color: #fff !important;
+    fill: #fff !important;
+    stroke: #fff !important;
+    font-size: 1.18em !important;
+    font-weight: 700 !important;
+    background: none !important;
+    text-shadow: 0 2px 8px #263238, 0 1px 2px #1565c0;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    vertical-align: middle;
+}
     </style>
 </head>
 <body>
     <!-- SheetJS para exportar a Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <header style="text-align:center;margin-bottom:25px;">
-        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="Asistencia" style="height:54px;margin-bottom:10px;filter:drop-shadow(0 2px 8px rgba(44,62,80,0.10));">
-        <h1 style="font-size:2.3em;color:#fff;margin-bottom:8px;letter-spacing:1px;font-weight:700;text-shadow:0 2px 8px rgba(44,62,80,0.10);">Registro de Asistencia 2026</h1>
-        <span style="font-size:1.15em;color:#e3e9f7;font-weight:400;">Sistema profesional para el control de asistencia por día y estudiante</span>
+    <header style="text-align:center;margin-bottom:25px;position:sticky;top:0;z-index:100;background:linear-gradient(90deg,#fffde4 0%,#e3e9f7 100%);box-shadow:0 8px 32px rgba(44,62,80,0.13);">
+        <button id="btnModoOscuro" onclick="toggleModoOscuro()" style="position:absolute;top:18px;right:18px;background:none;border:none;box-shadow:none;font-size:2.2em;cursor:pointer;transition:transform 0.2s;z-index:20;" onmouseenter="mostrarTooltipModoOscuro()" onmouseleave="ocultarTooltipModoOscuro()">
+            🌙
+        </button>
+        <div id="tooltipModoOscuro" style="display:none;position:absolute;top:60px;right:18px;background:#222;color:#fff;padding:7px 18px;border-radius:8px;font-size:1em;box-shadow:0 2px 8px rgba(44,62,80,0.18);z-index:30;pointer-events:none;">Modo oscuro</div>
+        <div style="display:flex;justify-content:center;align-items:center;width:100%;height:140px;background:linear-gradient(90deg,#fffde4 0%,#ffeeba 100%);border-radius:22px;border:2.5px solid #ffeeba;box-shadow:0 6px 32px rgba(251,192,45,0.18);margin-bottom:10px;">
+            <div style="display:flex;align-items:center;gap:22px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="Asistencia" style="height:70px;filter:drop-shadow(0 2px 8px rgba(44,62,80,0.10));">
+                <div style="text-align:left;">
+<h1 style="font-size:2.8em;color:#1976d2;margin-bottom:8px;letter-spacing:1.5px;font-weight:900;text-shadow:0 2px 12px rgba(44,62,80,0.13);background:linear-gradient(90deg,#1976d2 60%,#43a047 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">📝 Registro de Asistencia 2026</h1>
+                    <span style="font-size:1.25em;color:#e74c3c;font-weight:500;display:block;text-shadow:0 1px 2px #fff;">Sistema profesional para el control de asistencia por día y estudiante</span>
+                </div>
+            </div>
+        </div>
     </header>
-    <div class="instrucciones">
-        <strong>Instrucciones:</strong>
-        <p>Solo se permite importar y exportar archivos Excel (.xlsx).</p>
-        <p>Para agregar días de asistencia, usa el botón <b>+ Agregar día</b>.</p>
-        <p>Puedes editar los datos de los estudiantes y la asistencia por día directamente en la tabla.</p>
-        <p>Para descargar la plantilla de ejemplo, usa <b>Descargar plantilla</b>.</p>
-        <p>Para guardar los datos, simplemente edita la tabla; se guardan automáticamente.</p>
-        <p>Para importar datos desde Excel, usa <b>Importar Excel</b>.</p>
+    <div class="instrucciones" style="border:2px solid #ffd54f;background:linear-gradient(90deg,#fffde4 0%,#ffeeba 100%);box-shadow:0 4px 18px rgba(251,192,45,0.13);border-radius:18px;padding:24px 32px;margin-bottom:32px;max-width:700px;margin-left:auto;margin-right:auto;">
+        <strong style="font-size:1.18em;color:#e74c3c;">📚 Instrucciones:</strong>
+        <p>📥 Solo se permite importar y exportar archivos Excel (.xlsx).</p>
+        <p>🗓️ Para agregar días de asistencia, usa el botón <b>+ Agregar día</b>.</p>
+        <p>✏️ Puedes editar los datos de los estudiantes y la asistencia por día directamente en la tabla.</p>
+        <p>📄 Para descargar la plantilla de ejemplo, usa <b>Descargar plantilla</b>.</p>
+        <p>💾 Para guardar los datos, simplemente edita la tabla; se guardan automáticamente.</p>
+        <p>📤 Para importar datos desde Excel, usa <b>Importar Excel</b>.</p>
     </div>
     <div class="actions-bar" style="margin-bottom:15px;">
         <button onclick="descargarPlantilla()" title="Descarga una plantilla de ejemplo en Excel">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Descargar plantilla  
+            <span style="font-size:1.3em;">📄</span> Descargar plantilla
         </button>
         <input type="file" id="inputExcel" accept=".xlsx" style="display:none" onchange="cargarPlantilla(event)">
         <button onclick="document.getElementById('inputExcel').click()" title="Importa datos desde un archivo Excel (.xlsx)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><polyline points="5 12 12 19 19 12"/></svg>
-            Importar Excel
+            <span style="font-size:1.3em;">📥</span> Importar Excel
         </button>
         <button onclick="exportarDatos()" title="Exporta los datos actuales to Excel">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Exportar Excel
+            <span style="font-size:1.3em;">📤</span> Exportar Excel
         </button>
         <button onclick="guardarDatosManual()" title="Guarda los datos manualmente">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2z"/><polyline points="17 3 17 8 7 8 7 3"/></svg>
-            Guardar datos
+            <span style="font-size:1.3em;">💾</span> Guardar datos
         </button>
         <button onclick="agregarEstudiante()" title="Agrega un nuevo estudiante">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><line x1="12" y1="16" x2="12" y2="21"/><line x1="9" y1="21" x2="15" y2="21"/></svg>
-            Agregar estudiante
+            <span style="font-size:1.3em;">📝</span> Agregar estudiante
         </button>
         <button onclick="ordenarEstudiantesManual()" title="Ordena la lista de estudiantes por primer apellido" class="btn-agregar-est">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6v12"/><path d="M16 6v12"/><path d="M8 18h8"/></svg>
-            Ordenar estudiantes
+            <span style="font-size:1.3em;">🔤</span> Ordenar estudiantes
         </button>
         <div style="display:flex;align-items:center;gap:8px;margin-left:18px;">
             <input type="number" id="inputEliminarEst" min="1" max="50" placeholder="N° estudiante" style="width:90px;padding:7px 10px;border-radius:7px;border:1px solid #cfd8dc;font-size:1em;">
             <button onclick="eliminarEstudiantePorNumero()" class="btn-eliminar-est" title="Eliminar estudiante por número" style="padding:8px 18px;">
-                <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='3 6 5 6 21 6'/><path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m5 0V4a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v2'/><line x1='10' y1='11' x2='10' y2='17'/><line x1='14' y1='11' x2='14' y2='17'/></svg>
-                Eliminar estudiante
+                <span style="font-size:1.3em;">🗑️</span> Eliminar estudiante
             </button>
         </div>
     </div>
     <div id="contadorEstudiantes" style="margin-bottom:10px;font-weight:bold;"></div>
-    <div style="padding:18px 8px 24px 8px;border-radius:12px;background:#fff;">
-        <div style="background: linear-gradient(135deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 0 6px 32px rgba(44,62,80,0.10); border-radius: 18px; padding: 24px 16px;">
+    <div style="padding:24px 12px 32px 12px;border-radius:18px;background:#fff;box-shadow:0 8px 32px rgba(44,62,80,0.10);animation:fadeBlockIn 1.1s cubic-bezier(.77,0,.18,1) 0.5s;">
+        <div style="background: linear-gradient(135deg, #e3e9f7 0%, #f8fafc 100%); box-shadow: 0 10px 36px rgba(44,62,80,0.13); border-radius: 22px; padding: 32px 18px; animation:fadeBlockIn 1.1s cubic-bezier(.77,0,.18,1) 0.6s;">
             <div class="table-responsive">
                 <div id="app"></div>
             </div>
         </div>
     </div>
     <script>
+// Modo oscuro manual
+function aplicarModoOscuro(valor) {
+    if (valor) {
+        document.body.classList.add('dark-mode');
+        document.getElementById('btnModoOscuro').innerHTML = '☀️';
+        document.getElementById('tooltipModoOscuro').textContent = 'Modo claro';
+    } else {
+        document.body.classList.remove('dark-mode');
+        document.getElementById('btnModoOscuro').innerHTML = '🌙';
+        document.getElementById('tooltipModoOscuro').textContent = 'Modo oscuro';
+    }
+}
+function toggleModoOscuro() {
+    const esOscuro = !document.body.classList.contains('dark-mode');
+    aplicarModoOscuro(esOscuro);
+    localStorage.setItem('modoOscuro', esOscuro ? '1' : '0');
+}
+window.addEventListener('DOMContentLoaded', function() {
+    const modoOscuro = localStorage.getItem('modoOscuro') === '1';
+    aplicarModoOscuro(modoOscuro);
+    // Asegurar tooltip correcto al cargar
+    document.getElementById('btnModoOscuro').addEventListener('mouseenter', mostrarTooltipModoOscuro);
+    document.getElementById('btnModoOscuro').addEventListener('mouseleave', ocultarTooltipModoOscuro);
+});
+function mostrarTooltipModoOscuro() {
+    var tooltip = document.getElementById('tooltipModoOscuro');
+    tooltip.classList.add('visible');
+}
+function ocultarTooltipModoOscuro() {
+    var tooltip = document.getElementById('tooltipModoOscuro');
+    tooltip.classList.remove('visible');
+}
+
     function guardarDatosManual() {
         guardarDatos();
     mostrarAlerta('Datos guardados manualmente', 'exito');
@@ -631,11 +792,11 @@ html += '<tr>' +
             }
             let totalAusente = 0, totalTarde = 0, totalEscapada = 0;
             html += `<tr>
-                <td class="numero">${num++}</td>`;
-            html += `<td class="cedula"><input type="text" value="${estudiante.cedula || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'cedula', this.value)" placeholder="Número de cédula" aria-label="Cédula"></td>`;
-            html += `<td class="nombre"><input type="text" value="${estudiante.nombre || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'nombre', this.value)" placeholder="Nombre" aria-label="Nombre"></td>`;
-            html += `<td class="apellido1"><input type="text" value="${estudiante.apellido1 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido1', this.value)" placeholder="Primer apellido" aria-label="Primer apellido"></td>`;
-            html += `<td class="apellido2"><input type="text" value="${estudiante.apellido2 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido2', this.value)" placeholder="Segundo apellido" aria-label="Segundo apellido"></td>`;
+                <td class="numero sticky">${num++}</td>`;
+            html += `<td class="cedula sticky"><input type="text" value="${estudiante.cedula || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'cedula', this.value)" placeholder="Número de cédula" aria-label="Cédula"></td>`;
+            html += `<td class="nombre sticky"><input type="text" value="${estudiante.nombre || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'nombre', this.value)" placeholder="Nombre" aria-label="Nombre"></td>`;
+            html += `<td class="apellido1 sticky"><input type="text" value="${estudiante.apellido1 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido1', this.value)" placeholder="Primer apellido" aria-label="Primer apellido"></td>`;
+            html += `<td class="apellido2 sticky"><input type="text" value="${estudiante.apellido2 || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'apellido2', this.value)" placeholder="Segundo apellido" aria-label="Segundo apellido"></td>`;
             for (let d = 0; d < dias.length; d++) {
                 let dia = estudiante.asistenciaDias[d];
                 if (typeof dia === 'string') {
@@ -999,7 +1160,7 @@ function ordenarEstudiantesManual() {
             ws_data.push([
                 est.cedula,
                 est.nombre,
-                est.apellido1,
+                               est.apellido1,
                 est.apellido2,
                 ...est.asistenciaDias
             ]);
@@ -1013,6 +1174,9 @@ function ordenarEstudiantesManual() {
     document.addEventListener('DOMContentLoaded', function() {
         cargarDatosGuardados();
         // Scroll horizontal con mouse cerca del borde izquierdo/derecho
+       
+
+       
         const tableContainer = document.querySelector('.table-responsive');
         if (tableContainer) {
             tableContainer.addEventListener('mousemove', function(e) {
