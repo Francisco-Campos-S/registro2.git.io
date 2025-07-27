@@ -549,7 +549,7 @@ th[colspan] span, th[colspan] svg {
                 <div style="text-align:left;">
 <h1 style="font-size:2.8em;color:#1976d2;margin-bottom:8px;letter-spacing:1.5px;font-weight:900;text-shadow:0 2px 12px rgba(44,62,80,0.13);background:linear-gradient(90deg,#1976d2 60%,#43a047 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">📝 Registro de Asistencia 2026</h1>
                     <span style="font-size:1.25em;color:#e74c3c;font-weight:500;display:block;text-shadow:0 1px 2px #fff;">Sistema profesional para el control de asistencia por día y estudiante</span>
-                </div>
+                </div>gg
             </div>
         </div>
     </header>
@@ -833,16 +833,18 @@ html += '<tr>' +
                 if (dia.tipo === 'Tardía') totalTarde += Number(dia.cantidad || 0);
                 if (dia.tipo === 'Escapada') totalEscapada += Number(dia.cantidad || 0);
                 if (dia.tipo === 'Justificada') totalJustificada += Number(dia.cantidad || 0);
-                html += `<td style="min-width:130px;text-align:center;">
-                    <select onchange="actualizarAsistenciaTipo(${estudiantes.indexOf(estudiante)},${d},this.value)" style="width:110px;padding:6px 8px;font-size:1em;margin-right:8px;" aria-label="Tipo asistencia estudiante ${num-1} día ${d+1}">
-                        <option value="Presente"${dia.tipo === 'Presente' ? ' selected' : ''}>Presente</option>
-                        <option value="Ausente"${dia.tipo === 'Ausente' ? ' selected' : ''}>Ausente</option>
-                        <option value="Tardía"${dia.tipo === 'Tardía' ? ' selected' : ''}>Tardía</option>
-                        <option value="Escapada"${dia.tipo === 'Escapada' ? ' selected' : ''}>Escapada</option>
-                        <option value="Justificada"${dia.tipo === 'Justificada' ? ' selected' : ''}>Justificada</option>
-                    </select>
-                    ${dia.tipo !== 'Presente' ? `<input type="number" min="0" value="${dia.cantidad || 0}" style="width:54px;padding:6px 4px;font-size:1em;" onchange="actualizarAsistenciaCantidad(${estudiantes.indexOf(estudiante)},${d},this.value)" aria-label="Cantidad asistencia estudiante ${num-1} día ${d+1}">` : ''}
-                </td>`;
+                html += `<td style="min-width:130px;text-align:${dia.tipo === 'Presente' ? 'left' : 'center'};vertical-align:middle;">
+    <div style="display:flex;align-items:center;justify-content:${dia.tipo === 'Presente' ? 'flex-start' : 'center'};gap:8px;">
+        <select onchange="actualizarAsistenciaTipo(${estudiantes.indexOf(estudiante)},${d},this.value)" style="width:110px;padding:6px 8px;font-size:1em;margin-right:8px;text-align:${dia.tipo === 'Presente' ? 'left' : 'center'};" aria-label="Tipo asistencia estudiante ${num-1} día ${d+1}">
+            <option value="Presente"${dia.tipo === 'Presente' ? ' selected' : ''}>Presente</option>
+            <option value="Ausente"${dia.tipo === 'Ausente' ? ' selected' : ''}>Ausente</option>
+            <option value="Tardía"${dia.tipo === 'Tardía' ? ' selected' : ''}>Tardía</option>
+            <option value="Escapada"${dia.tipo === 'Escapada' ? ' selected' : ''}>Escapada</option>
+            <option value="Justificada"${dia.tipo === 'Justificada' ? ' selected' : ''}>Justificada</option>
+        </select>
+        ${dia.tipo !== 'Presente' ? `<input type=\"number\" min=\"0\" value=\"${dia.cantidad || 0}\" style=\"width:54px;padding:6px 4px;font-size:1em;\" onchange=\"actualizarAsistenciaCantidad(${estudiantes.indexOf(estudiante)},${d},this.value)\" aria-label=\"Cantidad asistencia estudiante ${num-1} día ${d+1}\">` : ''}
+    </div>
+</td>`;
             }
            // Calcular total de lecciones para el estudiante
            let totalLecciones = dias.reduce((acc, dia) => acc + (Number(dia.lecciones) || 0), 0);
@@ -915,15 +917,17 @@ html += '<tr>' +
                 if (dia.tipo === 'Tardía') totalTarde += Number(dia.cantidad || 0);
                 if (dia.tipo === 'Escapada') totalEscapada += Number(dia.cantidad || 0);
                 if (dia.tipo === 'Justificada') totalJustificada += Number(dia.cantidad || 0);
-                html += `<td style="min-width:130px;text-align:center;">
-                    <select onchange="actualizarAsistenciaTipo(${estudiantes.indexOf(estudiante)},${d},this.value)" style="width:110px;padding:6px 8px;font-size:1em;margin-right:8px;" aria-label="Tipo asistencia estudiante ${num-1} día ${d+1}">
-                        <option value="Ausente"${dia.tipo === 'Ausente' ? ' selected' : ''}>Ausente</option>
-                        <option value="Tardía"${dia.tipo === 'Tardía' ? ' selected' : ''}>Tardía</option>
-                        <option value="Escapada"${dia.tipo === 'Escapada' ? ' selected' : ''}>Escapada</option>
-                        <option value="Justificada"${dia.tipo === 'Justificada' ? ' selected' : ''}>Justificada</option>
-                    </select>
-                    <input type="number" min="0" value="${dia.cantidad || 0}" style="width:54px;padding:6px 4px;font-size:1em;" onchange="actualizarAsistenciaCantidad(${estudiantes.indexOf(estudiante)},${d},this.value)" aria-label="Cantidad asistencia estudiante ${num-1} día ${d+1}">
-                </td>`;
+                html += `<td style="min-width:130px;text-align:${dia.tipo === 'Presente' ? 'left' : 'center'};vertical-align:middle;">
+    <div style="display:flex;align-items:center;justify-content:${dia.tipo === 'Presente' ? 'flex-start' : 'center'};gap:8px;">
+        <select onchange="actualizarAsistenciaTipo(${estudiantes.indexOf(estudiante)},${d},this.value)" style="width:110px;padding:6px 8px;font-size:1em;margin-right:8px;text-align:${dia.tipo === 'Presente' ? 'left' : 'center'};" aria-label="Tipo asistencia estudiante ${num-1} día ${d+1}">
+            <option value="Ausente"${dia.tipo === 'Ausente' ? ' selected' : ''}>Ausente</option>
+            <option value="Tardía"${dia.tipo === 'Tardía' ? ' selected' : ''}>Tardía</option>
+            <option value="Escapada"${dia.tipo === 'Escapada' ? ' selected' : ''}>Escapada</option>
+            <option value="Justificada"${dia.tipo === 'Justificada' ? ' selected' : ''}>Justificada</option>
+        </select>
+        <input type="number" min="0" value="${dia.cantidad || 0}" style="width:54px;padding:6px 4px;font-size:1em;" onchange="actualizarAsistenciaCantidad(${estudiantes.indexOf(estudiante)},${d},this.value)" aria-label="Cantidad asistencia estudiante ${num-1} día ${d+1}">
+    </div>
+</td>`;
             }
             let totalLecciones = dias.reduce((acc, dia) => acc + (Number(dia.lecciones) || 0), 0);
             // Calcular % asistencia en base 10 usando la tabla de conversión
@@ -1087,6 +1091,16 @@ function ordenarEstudiantesManual() {
     });
     guardarDatos();
     renderAsistencia();
+}
+
+// Refuerzo la inicialización de estudiantes de ejemplo para que tengan el formato correcto
+if (!localStorage.getItem(STORAGE_KEY)) {
+    estudiantes = [
+        { cedula: "207890123", nombre: "Juan", apellido1: "Pérez", apellido2: "González", asistenciaDias: Array.from({length: dias.length}, () => ({ tipo: 'Presente', cantidad: 0 })) },
+        { cedula: "208901234", nombre: "María", apellido1: "Rodríguez", apellido2: "López", asistenciaDias: Array.from({length: dias.length}, () => ({ tipo: 'Presente', cantidad: 0 })) },
+        { cedula: "209012345", nombre: "Carlos", apellido1: "Sánchez", apellido2: "Jiménez", asistenciaDias: Array.from({length: dias.length}, () => ({ tipo: 'Presente', cantidad: 0 })) }
+    ];
+    guardarDatos();
 }
 
     function guardarDatos() {
