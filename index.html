@@ -651,7 +651,7 @@ function agregarEstudiante() {
         nombre: '',
         apellido1: '',
         apellido2: '',
-        asistenciaDias: Array.from({ length: dias.length }, () => ({ tipo: 'Ausente', cantidad: 0 }))
+        asistenciaDias: Array.from({ length: dias.length }, () => ({ tipo: 'Presente', cantidad: 0 }))
     });
     guardarDatos();
     renderAsistencia();
@@ -775,6 +775,8 @@ html += '<tr>' +
     '<th rowspan="2" class="apellido2">Segundo apellido</th>' +
    `<th colspan="${dias.length}"><span style="font-size:1em;font-weight:600;color:var(--color-primario);"><svg style="vertical-align:middle;margin-right:4px;" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primario)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="4"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Asistencia por día</span></th>` +
    '<th rowspan="2" class="th-resumen">Ausencias</th>' +
+   '<th rowspan="2" class="th-resumen">Justificadas</th>' +
+   '<th rowspan="2" class="th-resumen">Presentes</th>' +
    '<th rowspan="2" class="th-resumen">Tardías</th>' +
    '<th rowspan="2" class="th-resumen">Escapadas</th>' +
    '<th rowspan="2" class="th-resumen">Total ausencias</th>' +
@@ -809,7 +811,7 @@ html += '<tr>' +
             if (!estudiante.asistenciaDias || estudiante.asistenciaDias.length !== dias.length) {
                 estudiante.asistenciaDias = Array.from({ length: dias.length }, () => ({ tipo: 'Ausente', cantidad: 0 }));
             }
-            let totalAusente = 0, totalTarde = 0, totalEscapada = 0;
+            let totalAusente = 0, totalTarde = 0, totalEscapada = 0, totalJustificada = 0;
             html += `<tr>
                 <td class="numero sticky">${num++}</td>`;
             html += `<td class="cedula sticky"><input type="text" value="${estudiante.cedula || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'cedula', this.value)" placeholder="Número de cédula" aria-label="Cédula"></td>`;
@@ -830,13 +832,16 @@ html += '<tr>' +
                 if (dia.tipo === 'Ausente') totalAusente += Number(dia.cantidad || 0);
                 if (dia.tipo === 'Tardía') totalTarde += Number(dia.cantidad || 0);
                 if (dia.tipo === 'Escapada') totalEscapada += Number(dia.cantidad || 0);
+                if (dia.tipo === 'Justificada') totalJustificada += Number(dia.cantidad || 0);
                 html += `<td style="min-width:130px;text-align:center;">
                     <select onchange="actualizarAsistenciaTipo(${estudiantes.indexOf(estudiante)},${d},this.value)" style="width:110px;padding:6px 8px;font-size:1em;margin-right:8px;" aria-label="Tipo asistencia estudiante ${num-1} día ${d+1}">
+                        <option value="Presente"${dia.tipo === 'Presente' ? ' selected' : ''}>Presente</option>
                         <option value="Ausente"${dia.tipo === 'Ausente' ? ' selected' : ''}>Ausente</option>
                         <option value="Tardía"${dia.tipo === 'Tardía' ? ' selected' : ''}>Tardía</option>
                         <option value="Escapada"${dia.tipo === 'Escapada' ? ' selected' : ''}>Escapada</option>
+                        <option value="Justificada"${dia.tipo === 'Justificada' ? ' selected' : ''}>Justificada</option>
                     </select>
-                    <input type="number" min="0" value="${dia.cantidad || 0}" style="width:54px;padding:6px 4px;font-size:1em;" onchange="actualizarAsistenciaCantidad(${estudiantes.indexOf(estudiante)},${d},this.value)" aria-label="Cantidad asistencia estudiante ${num-1} día ${d+1}">
+                    ${dia.tipo !== 'Presente' ? `<input type="number" min="0" value="${dia.cantidad || 0}" style="width:54px;padding:6px 4px;font-size:1em;" onchange="actualizarAsistenciaCantidad(${estudiantes.indexOf(estudiante)},${d},this.value)" aria-label="Cantidad asistencia estudiante ${num-1} día ${d+1}">` : ''}
                 </td>`;
             }
            // Calcular total de lecciones para el estudiante
@@ -863,6 +868,11 @@ html += '<tr>' +
                else porcentajeAsistencia = 0;
            }
             html += `<td style="font-weight:bold;color:#e74c3c;text-align:center;">${totalAusente}</td>`;
+            html += `<td style="font-weight:bold;color:#1976d2;text-align:center;">${totalJustificada}</td>`;
+            let totalLeccionesPresentes = dias.reduce((acc, dia) => acc + (Number(dia.lecciones) || 0), 0);
+            let totalAusenciasPresentes = totalAusente + (totalTarde * 0.5) + totalEscapada;
+            let totalPresentes = totalLeccionesPresentes - totalAusenciasPresentes;
+            html += `<td style="font-weight:bold;color:#43a047;text-align:center;">${totalPresentes}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-alerta);text-align:center;">${totalTarde}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${totalEscapada}</td>`;
             html += `<td style="font-weight:bold;color:#e74c3c;text-align:center;">${totalAusente + (totalTarde * 0.5) + totalEscapada}</td>`;
@@ -883,7 +893,7 @@ html += '<tr>' +
             if (!estudiante.asistenciaDias || estudiante.asistenciaDias.length !== dias.length) {
                 estudiante.asistenciaDias = Array.from({ length: dias.length }, () => ({ tipo: 'Ausente', cantidad: 0 }));
             }
-            let totalAusente = 0, totalTarde = 0, totalEscapada = 0;
+            let totalAusente = 0, totalTarde = 0, totalEscapada = 0, totalJustificada = 0;
             html += `<tr style="opacity:0.7;"> <!-- fila vacía -->
                 <td class="numero">${num++}</td>`;
             html += `<td class="cedula"><input type="text" value="${estudiante.cedula || ''}" onchange="actualizarEstudiante(${estudiantes.indexOf(estudiante)}, 'cedula', this.value)" placeholder="Número de cédula" aria-label="Cédula"></td>`;
@@ -904,11 +914,13 @@ html += '<tr>' +
                 if (dia.tipo === 'Ausente') totalAusente += Number(dia.cantidad || 0);
                 if (dia.tipo === 'Tardía') totalTarde += Number(dia.cantidad || 0);
                 if (dia.tipo === 'Escapada') totalEscapada += Number(dia.cantidad || 0);
+                if (dia.tipo === 'Justificada') totalJustificada += Number(dia.cantidad || 0);
                 html += `<td style="min-width:130px;text-align:center;">
                     <select onchange="actualizarAsistenciaTipo(${estudiantes.indexOf(estudiante)},${d},this.value)" style="width:110px;padding:6px 8px;font-size:1em;margin-right:8px;" aria-label="Tipo asistencia estudiante ${num-1} día ${d+1}">
                         <option value="Ausente"${dia.tipo === 'Ausente' ? ' selected' : ''}>Ausente</option>
                         <option value="Tardía"${dia.tipo === 'Tardía' ? ' selected' : ''}>Tardía</option>
                         <option value="Escapada"${dia.tipo === 'Escapada' ? ' selected' : ''}>Escapada</option>
+                        <option value="Justificada"${dia.tipo === 'Justificada' ? ' selected' : ''}>Justificada</option>
                     </select>
                     <input type="number" min="0" value="${dia.cantidad || 0}" style="width:54px;padding:6px 4px;font-size:1em;" onchange="actualizarAsistenciaCantidad(${estudiantes.indexOf(estudiante)},${d},this.value)" aria-label="Cantidad asistencia estudiante ${num-1} día ${d+1}">
                 </td>`;
@@ -933,6 +945,7 @@ html += '<tr>' +
                 else porcentajeAsistencia = 0;
             }
             html += `<td style="font-weight:bold;color:#e74c3c;text-align:center;">${totalAusente}</td>`;
+            html += `<td style="font-weight:bold;color:#1976d2;text-align:center;">${totalJustificada}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-alerta);text-align:center;">${totalTarde}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${totalEscapada}</td>`;
             html += `<td style="font-weight:bold;color:#e74c3c;text-align:center;">${totalAusente + (totalTarde * 0.5) + totalEscapada}</td>`;
@@ -959,7 +972,7 @@ html += '<tr>' +
         }
         dias.push({ fecha: '', nombre: `Día ${dias.length + 1}`, lecciones: 0 });
         estudiantes.forEach(est => {
-            est.asistenciaDias.push({ tipo: 'Ausente', cantidad: 0 });
+            est.asistenciaDias.push({ tipo: 'Presente', cantidad: 0 });
         });
         guardarDatos();
         renderAsistencia();
