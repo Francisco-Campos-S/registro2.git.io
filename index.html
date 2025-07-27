@@ -534,6 +534,52 @@ function agregarEstudiante() {
 
     function renderAsistencia() {
 let html = `<div class="version-mensaje" style="margin-bottom:10px;font-size:1.08em;color:var(--color-primario);font-weight:500;">🗓️ Sistema de registro de asistencia <span style="color:var(--color-error);font-weight:bold;">v${VERSION}</span></div>`;
+// Campo editable para llenar si el % asistencia es menor a 10 y (10 - % asistencia) >= valorExtra
+if (typeof window.valorExtra === 'undefined') window.valorExtra = localStorage.getItem('valorExtra') ? parseFloat(localStorage.getItem('valorExtra')) : 2;
+let mostrarCampoExtra = false;
+for (let i = 0; i < estudiantes.length; i++) {
+    let estudiante = estudiantes[i];
+    let totalAusente = 0, totalTarde = 0, totalEscapada = 0;
+    if (!estudiante.asistenciaDias || estudiante.asistenciaDias.length !== dias.length) continue;
+    for (let d = 0; d < dias.length; d++) {
+        let dia = estudiante.asistenciaDias[d];
+        if (typeof dia === 'object') {
+            if (dia.tipo === 'Ausente') totalAusente += Number(dia.cantidad || 0);
+            if (dia.tipo === 'Tardía') totalTarde += Number(dia.cantidad || 0);
+            if (dia.tipo === 'Escapada') totalEscapada += Number(dia.cantidad || 0);
+        }
+    }
+    let totalAusencias = totalAusente + (totalTarde * 0.5) + totalEscapada;
+    let totalLecciones = dias.reduce((acc, dia) => acc + (Number(dia.lecciones) || 0), 0);
+    let porcentajeAsistencia = 0;
+    if (totalLecciones > 0) {
+        let porcentajeAusencia = (totalAusencias / totalLecciones) * 100;
+        porcentajeAusencia = Math.round(porcentajeAusencia * 100) / 100;
+        if (porcentajeAusencia > 100) porcentajeAsistencia = 0;
+        if (porcentajeAusencia < 1) porcentajeAsistencia = 10;
+        else if (porcentajeAusencia < 10) porcentajeAsistencia = 9;
+        else if (porcentajeAusencia < 20) porcentajeAsistencia = 8;
+        else if (porcentajeAusencia < 30) porcentajeAsistencia = 7;
+        else if (porcentajeAusencia < 40) porcentajeAsistencia = 6;
+        else if (porcentajeAusencia < 50) porcentajeAsistencia = 5;
+        else if (porcentajeAusencia < 60) porcentajeAsistencia = 4;
+        else if (porcentajeAusencia < 70) porcentajeAsistencia = 3;
+        else if (porcentajeAusencia < 80) porcentajeAsistencia = 2;
+        else if (porcentajeAusencia < 90) porcentajeAsistencia = 1;
+        else porcentajeAsistencia = 0;
+    }
+    if (porcentajeAsistencia < 10 && (10 - porcentajeAsistencia) >= window.valorExtra) {
+        mostrarCampoExtra = true;
+        break;
+    }
+}
+if (mostrarCampoExtra) {
+    html += `<div style="margin-bottom:12px;padding:8px 14px;background:#ffeaea;border-radius:8px;max-width:320px;">
+        <label for="inputValorExtra" style="color:#e74c3c;font-weight:bold;">Valor especial (%):</label>
+        <input type="number" id="inputValorExtra" min="0" max="10" step="0.1" value="${window.valorExtra}" style="width:70px;margin-left:8px;font-weight:bold;color:#222;background:#fff;border:2px solid #e74c3c;border-radius:6px;" onchange="window.valorExtra=this.value*1;localStorage.setItem('valorExtra',window.valorExtra)">
+        <span style="color:#222;font-size:0.95em;margin-left:8px;">(Se activa porque 10 - % asistencia ≥ ${window.valorExtra}%)</span>
+    </div>`;
+}
 html += `<button onclick="agregarDia()" class="btn-agregar-dia" title="Agregar nuevo día de asistencia" aria-label="Agregar día">
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="4"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     Agregar día
@@ -623,7 +669,7 @@ html += '<tr>' +
                let porcentajeAusencia = (totalAusencias / totalLecciones) * 100;
                // Redondear a dos decimales para evitar errores de comparación
                porcentajeAusencia = Math.round(porcentajeAusencia * 100) / 100;
-               if (porcentajeAusencia > 100) porcentajeAusencia = 100;
+               if (porcentajeAusencia > 100) porcentajeAsistencia = 0;
                // Tabla de conversión oficial, rangos estrictos
                if (porcentajeAusencia < 1) porcentajeAsistencia = 10;
                else if (porcentajeAusencia < 10) porcentajeAsistencia = 9;
@@ -643,6 +689,13 @@ html += '<tr>' +
             html += `<td style="font-weight:bold;color:#e74c3c;text-align:center;">${totalAusente + (totalTarde * 0.5) + totalEscapada}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-primario);text-align:center;">${totalLecciones}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${porcentajeAsistencia}</td>`;
+            // Mostrar aviso si (10 - % asistencia) >= valorExtra
+            let diferencia = 10 - porcentajeAsistencia;
+            let accionHtml = '';
+            if (porcentajeAsistencia < 10 && diferencia > window.valorExtra) {
+                accionHtml = `<span style="background:#ffeaea;color:#222;border-radius:6px;padding:4px 10px;font-weight:bold;border:2px solid #e74c3c;">Alerta temprana</span>`;
+            }
+            html += `<td style="font-size:0.92em;padding:2px 0;">${accionHtml}</td>`;
             html += '</tr>';
         }
         // Render vacíos al final
@@ -706,6 +759,13 @@ html += '<tr>' +
             html += `<td style="font-weight:bold;color:#e74c3c;text-align:center;">${totalAusente + (totalTarde * 0.5) + totalEscapada}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-primario);text-align:center;">${totalLecciones}</td>`;
             html += `<td style="font-weight:bold;color:var(--color-exito);text-align:center;">${porcentajeAsistencia}</td>`;
+            // Mostrar aviso si (10 - % asistencia) >= valorExtra
+            let diferencia = 10 - porcentajeAsistencia;
+            let accionHtml = '';
+            if (porcentajeAsistencia < 10 && diferencia > window.valorExtra) {
+                accionHtml = `<span style="background:#ffeaea;color:#222;border-radius:6px;padding:4px 10px;font-weight:bold;border:2px solid #e74c3c;">Alerta temprana</span>`;
+            }
+            html += `<td style="font-size:0.92em;padding:2px 0;">${accionHtml}</td>`;
             html += '</tr>';
         }
         html += '</tbody></table>';
