@@ -471,7 +471,7 @@ function agregarEstudiante() {
         nombre: '',
         apellido1: '',
         apellido2: '',
-        asistenciaDias: Array(dias.length).fill().map(() => ({ tipo: 'Ausente', cantidad: 0 }))
+        asistenciaDias: Array.from({ length: dias.length }, () => ({ tipo: 'Ausente', cantidad: 0 }))
     });
     guardarDatos();
     renderAsistencia();
@@ -500,9 +500,11 @@ function agregarEstudiante() {
             // Sincronizar asistenciaDias con cantidad de días
             estudiantes.forEach(est => {
                 if (!est.asistenciaDias) {
-                    est.asistenciaDias = Array(dias.length).fill('');
+                    est.asistenciaDias = Array.from({ length: dias.length }, () => ({ tipo: 'Ausente', cantidad: 0 }));
                 } else if (est.asistenciaDias.length < dias.length) {
-                    est.asistenciaDias = est.asistenciaDias.concat(Array(dias.length - est.asistenciaDias.length).fill(''));
+                    est.asistenciaDias = est.asistenciaDias.concat(
+                        Array.from({ length: dias.length - est.asistenciaDias.length }, () => ({ tipo: 'Ausente', cantidad: 0 }))
+                    );
                 } else if (est.asistenciaDias.length > dias.length) {
                     est.asistenciaDias = est.asistenciaDias.slice(0, dias.length);
                 }
@@ -558,7 +560,7 @@ function agregarEstudiante() {
         for (let i = 0; i < completos.length; i++) {
             const estudiante = completos[i];
             if (!estudiante.asistenciaDias || estudiante.asistenciaDias.length !== dias.length) {
-                estudiante.asistenciaDias = Array(dias.length).fill({ tipo: 'Ausente', cantidad: 0 });
+                estudiante.asistenciaDias = Array.from({ length: dias.length }, () => ({ tipo: 'Ausente', cantidad: 0 }));
             }
             let totalAusente = 0, totalTarde = 0, totalEscapada = 0;
             html += `<tr>
@@ -599,7 +601,7 @@ function agregarEstudiante() {
         for (let i = 0; i < vacios.length; i++) {
             const estudiante = vacios[i];
             if (!estudiante.asistenciaDias || estudiante.asistenciaDias.length !== dias.length) {
-                estudiante.asistenciaDias = Array(dias.length).fill({ tipo: 'Ausente', cantidad: 0 });
+                estudiante.asistenciaDias = Array.from({ length: dias.length }, () => ({ tipo: 'Ausente', cantidad: 0 }));
             }
             let totalAusente = 0, totalTarde = 0, totalEscapada = 0;
             html += `<tr style="opacity:0.7;"> <!-- fila vacía -->
